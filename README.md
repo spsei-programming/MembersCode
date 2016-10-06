@@ -2,7 +2,7 @@
 
 The place for your code..
 
-**All members have read/write access to all folders. **
+** All members have read/write access to all folders. **
 
 ## Rules
 
