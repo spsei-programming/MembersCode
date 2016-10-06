@@ -9,4 +9,4 @@ The place for your code..
 * Place your code in a folder named **_LastNameFirstName_**
 * Don't place here any code not related to group projects or production code
 * Share your ideas. Don't try to hide it, educate the others
-* BEHAVE!
+* **BEHAVE!**
