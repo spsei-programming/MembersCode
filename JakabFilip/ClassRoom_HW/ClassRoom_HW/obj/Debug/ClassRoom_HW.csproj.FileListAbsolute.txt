@@ -1,0 +1,6 @@
+C:\Users\Filip\Desktop\PRG_krouzek\ClassRoom_HW\ClassRoom_HW\bin\Debug\ClassRoom_HW.exe.config
+C:\Users\Filip\Desktop\PRG_krouzek\ClassRoom_HW\ClassRoom_HW\bin\Debug\ClassRoom_HW.exe
+C:\Users\Filip\Desktop\PRG_krouzek\ClassRoom_HW\ClassRoom_HW\bin\Debug\ClassRoom_HW.pdb
+C:\Users\Filip\Desktop\PRG_krouzek\ClassRoom_HW\ClassRoom_HW\obj\Debug\ClassRoom_HW.csprojResolveAssemblyReference.cache
+C:\Users\Filip\Desktop\PRG_krouzek\ClassRoom_HW\ClassRoom_HW\obj\Debug\ClassRoom_HW.exe
+C:\Users\Filip\Desktop\PRG_krouzek\ClassRoom_HW\ClassRoom_HW\obj\Debug\ClassRoom_HW.pdb
