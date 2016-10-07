@@ -160,43 +160,43 @@ namespace ClassRoom_HW
             }
         }
 
-	public void EatSnack()
-	{
-		if (Snack == true)
+		public void EatSnack()
 		{
-			Console.WriteLine($"Student { Name } is eating snack.");
-			Snack = false;
+			if (Snack == true)
+			{
+				Console.WriteLine($"Student { Name } is eating snack.");
+				Snack = false;
+			}
+			else
+			{
+				Console.WriteLine($"Student { Name } dont have any snack.");
+			}
 		}
-		else
-		{
-			Console.WriteLine($"Student { Name } dont have any snack.");
-		}
-	}
 
-	public void JoinLesson()
-	{
-		if (InLesson == false)
+		public void JoinLesson()
 		{
-			Console.WriteLine($"Student { Name } has joined lesson.");
-			InLesson = true;
+			if (InLesson == false)
+			{
+				Console.WriteLine($"Student { Name } has joined lesson.");
+				InLesson = true;
+			}
+			else
+			{
+				Console.WriteLine($"Student { Name } is currently in Lesson.");
+			}
 		}
-		else
-		{
-			Console.WriteLine($"Student { Name } is currently in Lesson.");
-		}
-	}
 
-	public void LeaveLesson()
-	{
-		if (InLesson == true)
+		public void LeaveLesson()
 		{
-			Console.WriteLine($"Student { Name } has left lesson.");
-			InLesson = false;
+			if (InLesson == true)
+			{
+				Console.WriteLine($"Student { Name } has left lesson.");
+				InLesson = false;
+			}
+			else
+			{
+				Console.WriteLine($"Studnet { Name } isnt currently in lesson.");
+			}
 		}
-		else
-		{
-			Console.WriteLine($"Studnet { Name } isnt currently in lesson.");
-		}
-	}
     }
 }
