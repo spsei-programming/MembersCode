@@ -151,6 +151,7 @@ namespace ClassRoom_HW
                     Console.WriteLine($"{ i }. Student { Name } has done one HW.");
                 }
 
+		HWToDo -= Amount;
                 Console.WriteLine($"Student { Name } has done requested amount({ Amount }) of HW");
             }
             else
@@ -159,43 +160,43 @@ namespace ClassRoom_HW
             }
         }
 
-		public void EatSnack()
+	public void EatSnack()
+	{
+		if (Snack == true)
 		{
-			if (Snack == true)
-			{
-				Console.WriteLine($"Student { Name } is eating snack.");
-				Snack = false;
-			}
-			else
-			{
-				Console.WriteLine($"Student { Name } dont have any snack.");
-			}
+			Console.WriteLine($"Student { Name } is eating snack.");
+			Snack = false;
 		}
+		else
+		{
+			Console.WriteLine($"Student { Name } dont have any snack.");
+		}
+	}
 
-		public void JoinLesson()
+	public void JoinLesson()
+	{
+		if (InLesson == false)
 		{
-			if (InLesson == false)
-			{
-				Console.WriteLine($"Student { Name } has joined lesson.");
-				InLesson = true;
-			}
-			else
-			{
-				Console.WriteLine($"Student { Name } is currently in Lesson.");
-			}
+			Console.WriteLine($"Student { Name } has joined lesson.");
+			InLesson = true;
 		}
+		else
+		{
+			Console.WriteLine($"Student { Name } is currently in Lesson.");
+		}
+	}
 
-		public void LeaveLesson()
+	public void LeaveLesson()
+	{
+		if (InLesson == true)
 		{
-			if (InLesson == true)
-			{
-				Console.WriteLine($"Student { Name } has left lesson.");
-				InLesson = false;
-			}
-			else
-			{
-				Console.WriteLine($"Studnet { Name } isnt currently in lesson.");
-			}
+			Console.WriteLine($"Student { Name } has left lesson.");
+			InLesson = false;
 		}
+		else
+		{
+			Console.WriteLine($"Studnet { Name } isnt currently in lesson.");
+		}
+	}
     }
 }
