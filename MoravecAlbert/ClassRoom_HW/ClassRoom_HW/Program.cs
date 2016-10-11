@@ -88,6 +88,9 @@ namespace ClassRoom_HW
 
             public void EndLesson()
             {
+                if (!Teacher.IsTeaching)
+                    return;
+
                 Teacher.IsTeaching = false;
                 Classroom.IsUsed = false;
                 foreach (Student student in Students)
