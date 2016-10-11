@@ -8,29 +8,31 @@ namespace ClassRoom_HW
         static void Main(string[] args)
         {
             List<Subject> subjects = new List<Subject>(2);
-            subjects.Add(new Subject("Mathematics", "MAT")); // How to save all the subjects so I can reuse them instead of instantiating the same ones every time...
-            subjects.Add(new Subject("Physics", "FYZ"));
-
-            Teacher teacher = new Teacher("Marie Kubickova", 0, Person.Sex.Female, subjects);
+            Subject math = new Subject("Mathematics", "MAT");
+            Subject physics = new Subject("Physics", "FYZ");
+            subjects.Add(math);
+            subjects.Add(physics);
 
             List<Student> students = new List<Student>(30);
-            students.Add(new Student("Albert Moravec", 16, Person.Sex.Male, Student.Fields.InformationTechnologies, Student.Specializations.Programming, new Subject("Mathematics", "MAT"))); // ...as I do here
+            Student am = new Student("Albert Moravec", 16, Person.Genders.Male, Student.Fields.InformationTechnologies, Student.Specializations.Programming, math);
+            students.Add(am);
 
+            Teacher teacher = new Teacher("Marie Kubickova", 0, Person.Genders.Female, subjects);
             Classroom classroom = new Classroom("C210");
-
             Class classobj = new Class("I2A", teacher, students, classroom);
 
-            Console.WriteLine($"Teacher is {classobj.Teacher.Name} and classroom is {classobj.Classroom.ID}.");
-            Console.Write($"Student {classobj.Students[0].Name} is ");
-            if (!classobj.Students[0].IsAtLesson) Console.Write("not");
-            Console.WriteLine(" in a lesson.");
+            classobj.StartLesson(math);
+            classobj.DumpInfo();
+            am.LeaveLesson(); //should I access this object through classobj?
+            classobj.DumpInfo();
+
             Console.ReadKey();
         }
 
         public class Class
         {
             public string Name;
-            public Teacher Teacher;
+            public Teacher Teacher; //this example expects only one teacher per class
             public List<Student> Students;
             public Classroom Classroom;
 
@@ -42,26 +44,69 @@ namespace ClassRoom_HW
                 Classroom = classroom;
             }
 
-            public void StartLesson()
+            public void DumpInfo()
             {
-                Teacher.IsTeaching = true;
-                foreach (var student in Students)
+                Console.WriteLine($"Class: {Name}\nClass teacher: {Teacher.Name}\nClassroom: {Classroom.Id}");
+                Console.WriteLine($"Students:\n");
+
+                foreach (Student student in Students)
                 {
-                    student.IsAtLesson = true;
+                    Console.WriteLine($"Name: {student.Name}\n" +
+                                      $"Age: {student.Age}\n" +
+                                      $"Field: {student.Field}\n" +
+                                      $"Specialization: {student.Specialization}\n" +
+                                      $"Favourite subject: {student.FavouriteSubject.Name}");
+                    if(student.IsInLesson) Console.WriteLine($"Is in lesson: {student.HasLesson.Name}");
                 }
+                Console.WriteLine("------------------------");
+
+            }
+
+            public void AddStudent(Student student)
+            {
+                Students.Add(student);
+            }
+
+            public void AssignTeacher(Teacher teacher)
+            {
+                Teacher = teacher;
+            }
+
+            public void StartLesson(Subject subject)
+            {
+                if (Teacher.IsTeaching || Classroom.IsUsed)
+                    return;
+
+                Teacher.IsTeaching = true;
                 Classroom.IsUsed = true;
+                foreach (Student student in Students)
+                {
+                    student.IsInLesson = true;
+                    student.HasLesson = subject;
+                }
+            }
+
+            public void EndLesson()
+            {
+                Teacher.IsTeaching = false;
+                Classroom.IsUsed = false;
+                foreach (Student student in Students)
+                {
+                    student.IsInLesson = false;
+                    student.HasLesson = null;
+                }
             }
         }
         
         public class Person
         {
-            public enum Sex { Male, Female };
+            public enum Genders { Male, Female };
 
             public string Name;
             public int Age;
-            public Sex Gender;
+            public Genders Gender;
 
-            public Person(string name, int age, Sex gender)
+            public Person(string name, int age, Genders gender)
             {
                 Name = name;
                 Age = age;
@@ -72,11 +117,16 @@ namespace ClassRoom_HW
         public class Teacher : Person
         {
             public List<Subject> Subjects;
-            public bool IsTeaching = false;
+            public bool IsTeaching;
 
-            public Teacher(string name, int age, Sex gender, List<Subject> subjects) : base(name, age, gender)
+            public Teacher(string name, int age, Genders gender, List<Subject> subjects) : base(name, age, gender)
             {
                 Subjects = subjects;
+            }
+
+            public void AddSubject(Subject subject)
+            {
+                Subjects.Add(subject);
             }
         }
 
@@ -88,13 +138,20 @@ namespace ClassRoom_HW
             public Fields Field;
             public Specializations Specialization;
             public Subject FavouriteSubject;
-            public bool IsAtLesson = false;
+            public bool IsInLesson; //possibly unecessary field as we can check against HasLesson (HasLesson != null (?))
+            public Subject HasLesson;
 
-            public Student(string name, int age, Sex gender, Fields field, Specializations spec, Subject favsub) : base(name, age, gender)
+            public Student(string name, int age, Genders gender, Fields field, Specializations spec, Subject favsub) : base(name, age, gender)
             {
                 Field = field;
                 Specialization = spec;
                 FavouriteSubject = favsub;
+            }
+
+            public void LeaveLesson()
+            {
+                IsInLesson = false;
+                HasLesson = null;
             }
         }
 
@@ -112,12 +169,12 @@ namespace ClassRoom_HW
 
         public class Classroom
         {
-            public string ID;
-            public bool IsUsed = false;
+            public string Id;
+            public bool IsUsed;
 
             public Classroom(string id)
             {
-                ID = id;
+                Id = id;
             }
         }
     }
