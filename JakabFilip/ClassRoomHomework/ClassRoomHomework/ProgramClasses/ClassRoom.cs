@@ -52,12 +52,13 @@ namespace ClassRoomHomework.ProgramClasses
 					tmpAge = 0;
 					break;
 			}
-			// place here removeMethod
 			students = new List<Student>(30);
 			for (int i = 0; i <= amountOfStudents; i++)
 			{
 				students.Add(new Student(i, "Jmeno_Student", tmpAge));
 			}
+
+			Console.WriteLine("ClassRoom created ...");
 		}
 
 		public void PrintClass()
@@ -71,14 +72,12 @@ namespace ClassRoomHomework.ProgramClasses
 			Console.WriteLine($"With teacher { teacher }");
 		}
 
-		public void RemoveWrongClassesFromList()
+		public void Validate()
 		{
-			foreach (ClassRoom classToDelete in Program.classRooms)
+			if (classLevel > 4)
 			{
-				if (classToDelete.classLevel > 4)
-				{
-					// will be finished ASAP
-				}
+				Program.classRooms.Remove(this);
+				Console.WriteLine($"Classroom { name } has been deleted due to its invalid class level. only (1 to 4)");
 			}
 		}
 	}

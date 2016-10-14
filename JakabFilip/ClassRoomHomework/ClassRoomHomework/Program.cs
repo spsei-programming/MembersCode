@@ -21,6 +21,21 @@ namespace ClassRoomHomework
 			classRooms.Add(new ProgramClasses.ClassRoom("I4C", 4, "Jmeno_Ucitel", 27));
 			classRooms.Add(new ProgramClasses.ClassRoom("I5C", 5, "Jmeno_Ucitel", 27));
 
+			foreach (ProgramClasses.ClassRoom classRoom in classRooms)
+			{
+				Console.WriteLine("hello");
+			}
+
+			Console.WriteLine("All classes has been validated ... ");
+
+			Console.WriteLine("zkousim zahajit hodinu ve vsech tridach ...");
+
+			foreach (ProgramClasses.ClassRoom classRoom in classRooms)
+			{
+				classRoom.teacher.StartLesson(classRoom.name);
+			}
+			Console.WriteLine("proces dokoncen.");
+
 			Console.ReadKey();
 		}
 	}

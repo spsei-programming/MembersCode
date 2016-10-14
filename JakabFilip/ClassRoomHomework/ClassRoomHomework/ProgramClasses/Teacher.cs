@@ -27,11 +27,15 @@ namespace ClassRoomHomework.ProgramClasses
 			isTeaching = false;
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="className">name of a class to start lesson with</param>
 		public void StartLesson(string className)
 		{
 			if (!isTeaching)
 			{
-				ClassRoom classFound = Program.classRooms.First(x => x.name == className);
+				ClassRoom classFound = Program.classRooms.FirstOrDefault(x => x.name == className);
 				if (classFound != null)
 				{
 					classFound.students.ForEach(x => x.atLesson = true);
@@ -41,7 +45,7 @@ namespace ClassRoomHomework.ProgramClasses
 				}
 				else
 				{
-					Console.WriteLine($"Fatal error appeared. There is no class with name: { className }");
+					Console.WriteLine($"Fatal error appeared. There is no class with name: { className }, teacher couldnt start lesson.");
 				}
 			}
 			else
