@@ -21,15 +21,20 @@ namespace ClassRoomHomework
 			classRooms.Add(new ProgramClasses.ClassRoom("I4C", 4, "Jmeno_Ucitel", 27));
 			classRooms.Add(new ProgramClasses.ClassRoom("I5C", 5, "Jmeno_Ucitel", 27));
 
-			foreach (ProgramClasses.ClassRoom classRoom in classRooms)
+			try
 			{
-				Console.WriteLine("hello");
+				foreach (ProgramClasses.ClassRoom classRoom in classRooms)
+				{
+					classRoom.Validate();
+				}
 			}
-
+			catch (InvalidOperationException)
+			{
+				Console.WriteLine("something is wrong with .Validate() method.");
+			}
 			Console.WriteLine("All classes has been validated ... ");
 
 			Console.WriteLine("zkousim zahajit hodinu ve vsech tridach ...");
-
 			foreach (ProgramClasses.ClassRoom classRoom in classRooms)
 			{
 				classRoom.teacher.StartLesson(classRoom.name);
