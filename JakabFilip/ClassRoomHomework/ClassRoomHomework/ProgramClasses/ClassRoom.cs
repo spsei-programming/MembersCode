@@ -21,13 +21,13 @@ namespace ClassRoomHomework.ProgramClasses
 		/// <param name="classLevel">level of the class, 1 - 4</param>
 		/// <param name="teacherName">name of the teacher</param>
 		/// <param name="amountOfStudents">amount of students in the classrooms</param>
-		public ClassRoom(string classRoomName, int classLevel, string teacherName, int amountOfStudents)
+		public ClassRoom(string classRoomName, int classLevel, string teacherName, Subject teachersSubject, int amountOfStudents)
 		{
 			this.name = classRoomName;
 			this.classLevel = classLevel;
 
 			// init teacher
-			teacher = new Teacher(Program.teachers + 1, teacherName, 30);
+			teacher = new Teacher(Program.teachers + 1, teacherName, 30, teachersSubject);
 			Program.teachers++;
 
 			// init students
