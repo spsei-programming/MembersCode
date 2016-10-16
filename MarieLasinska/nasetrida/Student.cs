@@ -6,17 +6,18 @@ using System.Threading.Tasks;
 
 namespace nasetrida
 {
-    class teacher
+    class Student
     {
         public string FirstName;
 
         public string Surname;
 
-        public enum Genders {Man, Woman}
+        public int Age;
 
-        public Genders Gender;
+        public Genders Genders;
 
-        public List<Subject> Special = new List<Subject>(3);
+        public Subject FavoriteSubject;
+
 
     }
 }
