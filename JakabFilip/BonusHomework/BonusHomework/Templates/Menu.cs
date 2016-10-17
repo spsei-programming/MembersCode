@@ -53,8 +53,10 @@ namespace BonusHomework.Templates
 					CreateTeacher();
 					break;
 				case "4":
+					RemoveClassRoom();
 					break;
 				case "5":
+					RemoveStudent();
 					break;
 				case "6":
 					DisplayAllClasses();
@@ -63,6 +65,7 @@ namespace BonusHomework.Templates
 					DisplayClassInfo();
 					break;
 				case "8":
+					DisplayTeachers();
 					break;
 				case "9":
 					Console.Clear();
@@ -81,8 +84,16 @@ namespace BonusHomework.Templates
 			Console.WriteLine("Enter class's name:");
 			className = Console.ReadLine();
 
-			Program.classRooms.Add(new ClassRoom(className));
-			Console.WriteLine("Class has been sucessfuly added");
+			try
+			{
+				Program.classRooms.First(x => x.name == className);
+				Console.WriteLine("This name of class is already used.");
+			}
+			catch (Exception)
+			{
+				Program.classRooms.Add(new ClassRoom(className));
+				Console.WriteLine("Class has been sucessfuly added");
+			}
 		}
 
 		public void CreateStudent()
@@ -123,7 +134,7 @@ namespace BonusHomework.Templates
 			}
 			catch (Exception e)
 			{
-				Console.WriteLine("Error: {0}.", e.ToString());
+				Console.WriteLine("Error: \n{0}", e.ToString());
 			}
 		}
 
@@ -157,7 +168,53 @@ namespace BonusHomework.Templates
 			}
 			catch (Exception e)
 			{
-				Console.WriteLine("Error has appeared. {0}", e.ToString());
+				Console.WriteLine("Error: \n{0}", e.ToString());
+			}
+		}
+
+		public void RemoveClassRoom()
+		{
+			string classNameToDelete;
+			ClassRoom classFound;
+
+			Console.WriteLine("Enter name of class, wich should be deleted.");
+			classNameToDelete = Console.ReadLine();
+
+			try
+			{
+				classFound = Program.classRooms.FirstOrDefault(x => x.name == classNameToDelete);
+				Program.classRooms.Remove(classFound);
+				Console.WriteLine("Classroom has been succesfuly deleted.");
+			}
+			catch (Exception e)
+			{
+				Console.WriteLine("Error: \n{0}", e.ToString());
+			}
+		}
+
+		public void RemoveStudent()
+		{
+			string nameToDelete;
+			string nameOfClass;
+			Student studentToDelete;
+			ClassRoom classFound;
+
+			Console.WriteLine("Enter name of class, where student is: ");
+			nameOfClass = Console.ReadLine();
+
+			Console.WriteLine("Enter name of student, u wish to delete: ");
+			nameToDelete = Console.ReadLine();
+
+			try
+			{
+				classFound = Program.classRooms.FirstOrDefault(x => x.name == nameOfClass);
+				studentToDelete = classFound.students.FirstOrDefault(x => x.name == nameToDelete);
+
+				classFound.students.Remove(studentToDelete);
+			}
+			catch (Exception e)
+			{
+				Console.WriteLine("Error: \n{0}", e.ToString());
 			}
 		}
 
@@ -187,8 +244,16 @@ namespace BonusHomework.Templates
 			{
 				classFound = Program.classRooms.First(x => x.name == className);
 
-				Console.ForegroundColor = ConsoleColor.White;
-				Console.WriteLine($"Teacher: { classFound.teacher.name } with subject { classFound.teacher.subject }");
+				try
+				{
+					Console.ForegroundColor = ConsoleColor.White;
+					Console.WriteLine($"Teacher: { classFound.teacher.name } with subject { classFound.teacher.subject }");
+				}
+				catch (Exception)
+				{
+					Console.ResetColor();
+					Console.WriteLine("This class has no Teacher ...");
+				}
 
 				Console.ForegroundColor = ConsoleColor.Blue;
 				foreach (Student student in classFound.students)
@@ -198,10 +263,26 @@ namespace BonusHomework.Templates
 			}
 			catch (Exception e)
 			{
-				Console.WriteLine("Error: {0}", e.ToString());
+				Console.WriteLine("Error: \n{0}", e.ToString());
 			}
+		}
 
-			Console.ResetColor();
+		public void DisplayTeachers()
+		{
+			try
+			{
+				Console.ForegroundColor = ConsoleColor.Cyan;
+				Console.WriteLine("List of teachers: ");
+				Console.ForegroundColor = ConsoleColor.White;
+				foreach (ClassRoom classToDisplay in Program.classRooms)
+				{
+					Console.WriteLine($"  Teachers-name: { classToDisplay.teacher.name } \twith { classToDisplay.teacher.subject.ToString() }");
+				}
+			}
+			catch (Exception e)
+			{
+				Console.WriteLine("Error: \n{0}", e.ToString());
+			}
 		}
 	}
 }
