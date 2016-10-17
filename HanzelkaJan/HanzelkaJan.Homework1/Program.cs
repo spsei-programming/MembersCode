@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,100 +21,222 @@ namespace HanzelkaJan.Homework1
 		static void Main(string[] args)
 		{
 
-			//Declarations
+			short index;
+			short selection;
+			string ClassroomName;
+			string StudentName;
+			List<Classroom> Classrooms = new List<Classroom>(5);
+			List<Student> Students = new List<Student>(25);
 
-			Program Program = new Program();
 
-			Classroom class1 = new Classroom();
-			Classroom class2 = new Classroom();
-			Classroom class3 = new Classroom();
-
-			Teacher Sladek = new Teacher();
-			Teacher Hrabal = new Teacher();
-			Teacher Trnka = new Teacher();
-
-			Student Placka = new Student();
-			Student Hryzal = new Student();
-			Student Drozd = new Student();
-
-			Subject Physics = new Subject();
-			Subject Mathematics = new Subject();
-			Subject Programming = new Subject();
-			Subject Networking = new Subject();
-
-			//Class initiation
-
-			Program.InitiateClass(class1, Classroom.Orientations.Informatici, 2, Classroom.Groups.C);
-			Program.InitiateClass(class1, Classroom.Orientations.Informatici, 2, Classroom.Groups.A);
-			Program.InitiateClass(class1, Classroom.Orientations.Elektro, 2, Classroom.Groups.B);
-
-			//Teacher initiation
-
-			Sladek.FirstName = "Martin";
-			Sladek.LastName = "Sladek";
-			Sladek.SetClass(class1);
-			Sladek.AddSubject(Programming);
-
-			Hrabal.FirstName = "Marek";
-			Hrabal.LastName = "Hrabal";
-			Hrabal.SetClass(class2);
-			Hrabal.AddSubject(Physics);
-			Hrabal.AddSubject(Mathematics);
-
-			Trnka.FirstName = "Daniel";
-			Trnka.LastName = "Trnka";
-			Trnka.SetClass(class3);
-			Trnka.AddSubject(Programming);
-			Trnka.AddSubject(Networking);
-
-			//Student initiation
-
-			Placka.FirstName = "Petr";
-			Placka.LastName = "Placka";
-			Placka.FavSubject = Networking;
-			Placka.SetClass(class1);
-
-			Hryzal.FirstName = "Pavel";
-			Hryzal.LastName = "Hryzal";
-			Hryzal.FavSubject = Physics;
-			Hryzal.SetClass(class1);
-
-			Drozd.FirstName = "Karel";
-			Drozd.LastName = "Drozd";
-			Drozd.FavSubject = Programming;
-			Drozd.SetClass(class2);
-
-			//Random printing test
-
-			Console.WriteLine($"{Placka.GetStudentName()}'s favourite subject is {Placka.FavSubject.Name}, he's from {Placka.Class.GetClassName()}\n");
-			Console.WriteLine($"{Placka.Class.Teacher.GetTeacherName()} is {Placka.Class.GetClassName()}'s teacher\n");
-			Console.WriteLine($"{Placka.FavSubject.Name} is taught by these teachers:");
-
-			foreach (Teacher teacher in Placka.FavSubject.Teachers)
+			do
 			{
-				Console.WriteLine($"\t{teacher.GetTeacherName()}");
-			}
+				Console.WriteLine("1. Create a classroom");
+				Console.WriteLine("2. Create a student");
+				Console.WriteLine("3. Remove classroom");
+				Console.WriteLine("4. Remove student ");
+				Console.WriteLine("5. List of all classrooms");
+				Console.WriteLine("6. List of all students");
+				Console.WriteLine("7. List of all students in a class");
+				Console.WriteLine("8. ");
+				Console.WriteLine("9. Clear the screen");
+				Console.WriteLine("0. Exit program\n");
 
-			Console.WriteLine();
+				selection = Convert.ToInt16(Console.ReadLine());
 
-			Console.WriteLine($"A total of {class1.Students.Count} people attend {class1.GetClassName()}, these are:");
-
-			foreach (Student student in class1.Students)
-			{
-				Console.WriteLine($"\t{student.GetStudentName()}");
-			}
-
-			Console.WriteLine($"{Programming.Name} is taught by a total of {Programming.Teachers.Count} teachers, these are:");
-
-			foreach (Teacher teacher in Programming.Teachers)
-			{
-				Console.WriteLine($"\t{teacher.GetTeacherName()}");
-			}
+				if (selection == 0) break;
 
 
+				switch (selection)
+				{
+
+					case 1:
+
+						do
+						{
+							Console.Write("Classroom name(e.g. I1A, 0 to cancel): ");
+							ClassroomName = Console.ReadLine().ToUpper();
+
+							if (ClassroomName == "0") break;
+
+							if ((ClassroomName[0] == 'I' || ClassroomName[0] == 'E') &&
+							    Convert.ToByte(ClassroomName[1])>'0' && Convert.ToByte(ClassroomName[1])<'5' &&
+							    (ClassroomName[2] == 'A' || ClassroomName[2] == 'B' || ClassroomName[2] == 'C'))
+							{
+								if (
+									Classrooms.Exists(
+										x =>
+											x.Orientation ==
+											(ClassroomName[0] == 'I' ? Classroom.Orientations.Informatici : Classroom.Orientations.Elektro)) &&
+									Classrooms.Exists(x => x.Level == Byte.Parse(Convert.ToString(ClassroomName[1]))) &&
+									Classrooms.Exists(
+										x =>
+											x.Group == (ClassroomName[2] == 'A'
+												? Classroom.Groups.A
+												: ClassroomName[2] == 'B' ? Classroom.Groups.B : Classroom.Groups.C)))
+								{
+									Console.WriteLine("\n---Classroom already exists---\n");
+								}
+								else
+								{
+									Classrooms.Add(new Classroom
+									{
+										Orientation = ClassroomName[0] == 'I' ? Classroom.Orientations.Informatici : Classroom.Orientations.Elektro,
+										Level = Byte.Parse(Convert.ToString(ClassroomName[1])),
+										Group =
+											ClassroomName[2] == 'A'
+												? Classroom.Groups.A
+												: ClassroomName[2] == 'B' ? Classroom.Groups.B : Classroom.Groups.C
+									});
+								}
+
+							}
+							else
+							{
+								Console.WriteLine("Invalid classroom name\n");
+							}
+							Console.WriteLine("Press Y to add another classroom, anything else to go back to menu\n");
+						} while (Console.ReadKey(true).Key==ConsoleKey.Y);
+
+						break;
+
+					case 2:
+
+						do
+						{
+							Console.Write("Student name(e.g. Martin Sladek, 0 to cancel): ");
+							StudentName = Console.ReadLine();
+							if (StudentName == "0") break;
+							Console.WriteLine("Which classroom will they be attending?(Index)\n");
+
+							foreach(Classroom classroom in Classrooms)
+								Console.WriteLine(Classrooms.IndexOf(classroom)+1+ ". " + classroom.GetClassName());
+
+							Console.WriteLine();
+
+							var names = StudentName.Split(' ');
+
+							Students.Add(new Student {FirstName = names.First(), LastName = names.Last(), IdentificationNumber = Students.Count+1, Class = Classrooms[Int16.Parse(Console.ReadLine())-1]});
+
+							Console.WriteLine("Press Y to add another student, anything else to go back to menu\n");
+						} while (Console.ReadKey(true).Key == ConsoleKey.Y);
+
+						break;
+
+					case 3:
+
+						do
+						{
 
 
-			Console.ReadKey();
+							Console.WriteLine("Which class do you want to remove?(Index, 0 to cancel)\n");
+							foreach (Classroom classroom in Classrooms)
+								Console.WriteLine(Classrooms.IndexOf(classroom) + 1 + ". " + classroom.GetClassName());
+							Console.WriteLine();
+
+							index = Int16.Parse(Console.ReadLine());
+
+							if (index == 0) break;
+
+							Console.WriteLine("Press Y to confirm deletion, anything else to cancel\n");
+							if (Console.ReadKey(true).Key == ConsoleKey.Y)
+							{
+								Console.WriteLine($"Classroom {Classrooms[index-1].GetClassName()} deleted\n");
+								Classrooms.RemoveAt(index - 1);
+							}
+							Console.WriteLine("Press Y to delete another classroom, anything else to go back to menu\n");
+						} while (Console.ReadKey(true).Key == ConsoleKey.Y);
+
+						break;
+					case 4:
+
+					do
+					{
+						Console.WriteLine("Which student do you want to remove?(Index, 0 to cancel)\n");
+						foreach (Student student in Students)
+							Console.WriteLine(Students.IndexOf(student) + 1 + ". " + student.GetStudentName());
+						Console.WriteLine();
+
+						index = Int16.Parse(Console.ReadLine());
+
+						if (index == 0) break;
+
+						Console.WriteLine("Press Y to confirm deletion, anything else to cancel\n");
+						if (Console.ReadKey(true).Key == ConsoleKey.Y)
+						{
+							Console.WriteLine($"Student {Students[index - 1].GetStudentName()} deleted\n");
+							Students.RemoveAt(index - 1);
+						}
+						Console.WriteLine("Press Y to delete another student, anything else to go back to menu\n");
+					} while (Console.ReadKey(true).Key == ConsoleKey.Y) ;
+
+					break;
+
+					case 5:
+
+						Console.ForegroundColor = ConsoleColor.Cyan;
+						Console.WriteLine("{0,-20}{1,-20}","Index", "Class name");
+						Console.ForegroundColor = ConsoleColor.Gray;
+						foreach (Classroom classroom in Classrooms)
+							Console.WriteLine("{0,-20}{1,-20}",Classrooms.IndexOf(classroom) + 1 + ". ", classroom.GetClassName());
+						Console.WriteLine();
+						Console.ReadKey(true);
+
+						break;
+					case 6:
+
+						Console.ForegroundColor = ConsoleColor.Cyan;
+						Console.WriteLine("{0,-20}{1,-20}{2,-20}{3,-20}","ID","First Name","Last Name","Classroom");
+						Console.ForegroundColor = ConsoleColor.Gray;
+						foreach (Student student in Students)
+						{
+							Console.WriteLine("{0,-20}{1,-20}{2,-20}{3,-20}", student.IdentificationNumber, student.FirstName,student.LastName, student.Class.GetClassName());
+						}
+						Console.ReadKey(true);
+						Console.WriteLine();
+
+						break;
+					case 7:
+
+						Console.WriteLine("Show students from which classroom?(Index, 0 to cancel)");
+
+						foreach (Classroom classroom in Classrooms)
+							Console.WriteLine(Classrooms.IndexOf(classroom) + 1 + ". " + classroom.GetClassName());
+						Console.WriteLine();
+
+						index = Int16.Parse(Console.ReadLine());
+
+						if (index == 0) break;
+
+						Console.ForegroundColor = ConsoleColor.Cyan;
+						Console.WriteLine("{0,-20}{1,-20}{2,-20}", "ID", "First name", "Last name");
+						Console.ForegroundColor = ConsoleColor.Gray;
+
+						foreach (Student student in Students)
+						{
+							if(student.Class == Classrooms[index-1])
+							Console.WriteLine("{0,-20}{1,-20}{2,-20}", student.IdentificationNumber, student.FirstName, student.LastName);
+						}
+						Console.WriteLine();
+						Console.ReadKey(true);
+
+						break;
+					case 8:
+						break;
+					case 9:
+						Console.Clear();
+						break;
+					case 0:
+						break;
+					default:
+						Console.WriteLine("Invalid selection.\n");
+						break;
+
+				}
+
+
+			} while (selection!=0);
+
 
 		}
 	}
