@@ -9,13 +9,22 @@ namespace BonusHomework.Templates
 	public class ClassRoom
 	{
 		public string name;
+		public byte level;
+
+		public MemberTypes memberType;
+		public Orientations classOrientation;
 
 		public List<Student> students;
 		public Teacher teacher;
 
-		public ClassRoom(string name)
+		public ClassRoom() { }
+
+		public ClassRoom(string name, MemberTypes memberType, Orientations classOrientation, byte level)
 		{
 			this.name = name;
+			this.memberType = memberType;
+			this.classOrientation = classOrientation;
+			this.level = level;
 
 			students = new List<Student>(30);
 		}

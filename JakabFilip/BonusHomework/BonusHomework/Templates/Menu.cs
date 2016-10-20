@@ -26,6 +26,7 @@ namespace BonusHomework.Templates
 			Console.WriteLine("0. Exit Program\n");
 		}
 
+		// -----------------------------------------------------------------------------------------------------------------------------------
 		public void GetInput()
 		{
 			try
@@ -39,6 +40,7 @@ namespace BonusHomework.Templates
 			}
 		}
 
+		// -----------------------------------------------------------------------------------------------------------------------------------
 		public void DoAction()
 		{
 			switch (menuInput)
@@ -77,25 +79,72 @@ namespace BonusHomework.Templates
 			}
 		}
 
+		// -----------------------------------------------------------------------------------------------------------------------------------
 		public void CreateClassRoom()
 		{
-			string className;
+			//	string className;
 
-			Console.WriteLine("Enter class's name:");
-			className = Console.ReadLine();
+			//	Console.WriteLine("Enter class's name:");
+			//	className = Console.ReadLine();
 
+			//	try
+			//	{
+			//		Program.classRooms.First(x => x.name == className);
+			//		Console.WriteLine("This name of class is already used.");
+			//	}
+			//	catch (Exception)
+			//	{
+			//		Program.classRooms.Add(new ClassRoom(className));
+			//		Console.WriteLine("Class has been sucessfuly added");
+			//	}
+
+			string classNameInput;
+			byte convertLevel;
+			ClassRoom classFound;
+
+			Console.Write("Enter class name: ");
+			classNameInput = Console.ReadLine().ToUpper();
+
+			// Validation
+			if ((classNameInput[0] == 'I') || (classNameInput[0] == 'E')
+					&&
+				(classNameInput[1] >= 1) && (classNameInput[1] <= 4)
+					&&
+				(classNameInput[2] == 'A') || (classNameInput[2] == 'B') || (classNameInput[2] == 'C'))
+			{
+				if (!(byte.TryParse(classNameInput[1].ToString(), out convertLevel)))
+				{
+					Console.WriteLine("Wrong level of class ...");
+					return;
+				}
+			}
+			else
+			{
+				Console.WriteLine("class name doesnt match with the standarts ...");
+				return;
+			}
+
+			// if exists
 			try
 			{
-				Program.classRooms.First(x => x.name == className);
-				Console.WriteLine("This name of class is already used.");
+				classFound = Program.classRooms.First(x => x.name == classNameInput);
+				Console.WriteLine("Class with this name already exists ...");
 			}
 			catch (Exception)
 			{
-				Program.classRooms.Add(new ClassRoom(className));
-				Console.WriteLine("Class has been sucessfuly added");
+				Program.classRooms.Add(new ClassRoom
+				{
+					name = classNameInput,
+					memberType = (classNameInput[2] == 'A') ? MemberTypes.A : (classNameInput[2] == 'B') ? MemberTypes.B : MemberTypes.C,
+					classOrientation = (classNameInput[0] == 'I') ? Orientations.Informatics : Orientations.Engineers,
+					level = convertLevel
+				});
+
+				Console.WriteLine("Class has been set. ");
 			}
 		}
 
+		// -----------------------------------------------------------------------------------------------------------------------------------
 		public void CreateStudent()
 		{
 			string id;
@@ -134,10 +183,12 @@ namespace BonusHomework.Templates
 			}
 			catch (Exception e)
 			{
+				Console.ForegroundColor = ConsoleColor.Red;
 				Console.WriteLine("Error: \n{0}", e.ToString());
 			}
 		}
 
+		// -----------------------------------------------------------------------------------------------------------------------------------
 		public void CreateTeacher()
 		{
 			string id;
@@ -168,10 +219,12 @@ namespace BonusHomework.Templates
 			}
 			catch (Exception e)
 			{
+				Console.ForegroundColor = ConsoleColor.Red;
 				Console.WriteLine("Error: \n{0}", e.ToString());
 			}
 		}
 
+		// -----------------------------------------------------------------------------------------------------------------------------------
 		public void RemoveClassRoom()
 		{
 			string classNameToDelete;
@@ -188,10 +241,12 @@ namespace BonusHomework.Templates
 			}
 			catch (Exception e)
 			{
+				Console.ForegroundColor = ConsoleColor.Red;
 				Console.WriteLine("Error: \n{0}", e.ToString());
 			}
 		}
 
+		// -----------------------------------------------------------------------------------------------------------------------------------
 		public void RemoveStudent()
 		{
 			string nameToDelete;
@@ -214,24 +269,33 @@ namespace BonusHomework.Templates
 			}
 			catch (Exception e)
 			{
+				Console.ForegroundColor = ConsoleColor.Red;
 				Console.WriteLine("Error: \n{0}", e.ToString());
 			}
 		}
 
+		// -----------------------------------------------------------------------------------------------------------------------------------
 		public void DisplayAllClasses()
 		{
-			Console.ForegroundColor = ConsoleColor.Yellow;
-			Console.WriteLine("List of all classes: ");
-
-			Console.ForegroundColor = ConsoleColor.Blue;
-			foreach (ClassRoom classRoom in Program.classRooms)
+			if (Program.classRooms.Count() > 0)
 			{
-				Console.WriteLine($"  class-name: { classRoom.name }\tclass-amount of students: { classRoom.students.Count().ToString() } ");
-			}
+				Console.ForegroundColor = ConsoleColor.Yellow;
+				Console.WriteLine("List of all classes: ");
 
-			Console.ResetColor();
+				Console.ForegroundColor = ConsoleColor.Cyan;
+				foreach (ClassRoom classRoom in Program.classRooms)
+				{
+					Console.WriteLine($"  class-name: { classRoom.name }\tclass -amount of students: { ((classRoom.students == null) ? "0" : classRoom.students.Count().ToString())} ");
+				}
+			}
+			else
+			{
+				Console.ForegroundColor = ConsoleColor.Red;
+				Console.WriteLine("There is no class to be displayed.");
+			}
 		}
 
+		// -----------------------------------------------------------------------------------------------------------------------------------
 		public void DisplayClassInfo()
 		{
 			string className;
@@ -251,7 +315,7 @@ namespace BonusHomework.Templates
 				}
 				catch (Exception)
 				{
-					Console.ResetColor();
+					Console.ForegroundColor = ConsoleColor.Red;
 					Console.WriteLine("This class has no Teacher ...");
 				}
 
@@ -263,10 +327,12 @@ namespace BonusHomework.Templates
 			}
 			catch (Exception e)
 			{
+				Console.ForegroundColor = ConsoleColor.Red;
 				Console.WriteLine("Error: \n{0}", e.ToString());
 			}
 		}
 
+		// -----------------------------------------------------------------------------------------------------------------------------------
 		public void DisplayTeachers()
 		{
 			try
@@ -281,6 +347,7 @@ namespace BonusHomework.Templates
 			}
 			catch (Exception e)
 			{
+				Console.ForegroundColor = ConsoleColor.Red;
 				Console.WriteLine("Error: \n{0}", e.ToString());
 			}
 		}
