@@ -8,6 +8,11 @@ namespace ClassRoom_HW
         static void Main(string[] args)
         {
             List<Subject> subjects = new List<Subject>(2);
+            
+            // it could be also done by this:
+            /*
+            subjects.add(new Subject("Mathematics", "MAT"));
+            */
             Subject math = new Subject("Mathematics", "MAT");
             Subject physics = new Subject("Physics", "FYZ");
             subjects.Add(math);
