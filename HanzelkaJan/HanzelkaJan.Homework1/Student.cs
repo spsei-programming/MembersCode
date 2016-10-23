@@ -11,6 +11,8 @@ namespace HanzelkaJan.Homework1
 
 		//Fields
 
+		public int IdentificationNumber;
+
 		public string FirstName;
 
 		public string LastName;

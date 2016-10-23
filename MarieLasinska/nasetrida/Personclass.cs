@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace nasetrida
 {
-    class Personclass
+    class PersonClass
     {
         public int Grade;
 
