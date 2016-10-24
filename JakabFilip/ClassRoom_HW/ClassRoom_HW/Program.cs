@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ClassRoom_HW
+namespace JakabFilip.ClassRoomHomework
 {
 	class Program
-    {
-        static void Main(string[] args)
-        {
+	{
+		static void Main(string[] args)
+		{
 			// List prepared for 6 classes
 			List<ClassRoom> clssrms = new List<ClassRoom>(6);
 
@@ -25,32 +25,32 @@ namespace ClassRoom_HW
 			clssrms[3].GenerateEntities("Leos Pospisil", 16); // E2C
 
 			// printing classrooms
-			foreach(ClassRoom CR in clssrms)
+			foreach (ClassRoom cr in clssrms)
 			{
-				Console.WriteLine($"students in classroom -> { CR.ID }");
+				Console.WriteLine($"students in classroom -> { cr.ID }");
 				Console.WriteLine("ID \t Name \t\t Age \t ID \t Name \t\t Age");
 				Console.WriteLine("------------------------------------------------------------\t||");
 				for (int i = 0; i < 20; i++)
 				{
-					Console.Write($" { CR.students[i].ID }.\t { CR.students[i].Name },\t { CR.students[i].Age } \t");
-					Console.Write($" { CR.students[i + 10].ID}.\t { CR.students[i + 10].Name },\t { CR.students[i + 10].Age } \t|| \n");
+					Console.Write($" { cr.students[i].ID }.\t { cr.students[i].Name },\t { cr.students[i].Age } \t");
+					Console.Write($" { cr.students[i + 10].ID}.\t { cr.students[i + 10].Name },\t { cr.students[i + 10].Age } \t|| \n");
 				}
-				Console.WriteLine($"with teacher { CR.tchr.Name }.\t\t\t\t\t||");
+				Console.WriteLine($"with teacher { cr.tchr.Name }.\t\t\t\t\t||");
 				Console.WriteLine("-------------------------------------------------------\t\t||");
 			}
 
 			Console.ReadKey();
-        }
-    }
+		}
+	}
 
-    public class Man
-    {
-        public int Age;
+	public class Man
+	{
+		public int Age;
 		public int ID;
-        public string Name;
-        public enum Gender { Male, Female };
+		public string Name;
+		public enum Genders { Male, Female };
 
-		public Gender Gndr;
+		public Genders Gender;
 	}
 
 	public class ClassRoom
@@ -70,29 +70,37 @@ namespace ClassRoom_HW
 		{
 			for (int i = 0; i < 30; i++)
 			{
-				students.Add(new Student("Adam Novak", i + 1, StdAge, Man.Gender.Male, "PRG"));
+				students.Add(new Student("Adam Novak", i + 1, StdAge, Man.Genders.Male, "PRG"));
 			}
 
-			tchr = new Teacher(TchrName, 0, 46, "Math", Man.Gender.Male);
+			tchr = new Teacher(TchrName, 0, 46, "Math", Man.Genders.Male);
 		}
 	}
 
 	public class Teacher : Man
-    {
+	{
 		public bool IsTeaching;
 		public string Subject;
 
-        public Teacher(string N, int D, int A, string Sbj, Gender G)
-        {
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="N">Name property</param>
+		/// <param name="D">ID</param>
+		/// <param name="A"></param>
+		/// <param name="Sbj"></param>
+		/// <param name="G"></param>
+		public Teacher(string N, int D, int A, string Sbj, Genders G)
+		{
 			this.Name = N;
 			this.ID = D;
 			this.Age = A;
 			this.Subject = Sbj;
-			this.Gndr = G;
+			this.Gender = G;
 
 			IsTeaching = false;
-        }
-		
+		}
+
 		public void StartLesson(string ClassRoom)
 		{
 			if (IsTeaching == false) // TODO: najit tridu "ClassRoom" ("I2C") a nastavit studenty AtLsson = true pokud mozno
@@ -110,29 +118,29 @@ namespace ClassRoom_HW
 		{
 
 		}
-    }
+	}
 
-    public class Student : Man
-    {
+	public class Student : Man
+	{
 		public int Absent;
 		public bool Snack;
 		public bool AtLesson;
 		public bool HasHW;
 		public string FavSub;
 
-        public Student(string N, int D, int A, Gender G, string FS)
-        {
+		public Student(string N, int D, int A, Genders G, string FS)
+		{
 			this.Name = N;
 			this.ID = D;
 			this.Age = A;
-			this.Gndr = G;
+			this.Gender = G;
 			this.FavSub = FS;
 
 			Absent = 0;
 			Snack = true;
 			AtLesson = false;
 			HasHW = false;
-        }
+		}
 
 		public void JoinLesson(string Lssn, string Sbj)
 		{
@@ -159,5 +167,5 @@ namespace ClassRoom_HW
 				Console.WriteLine($"Student { this.Name } isnt in the lesson, at the moment.");
 			}
 		}
-    }
+	}
 }

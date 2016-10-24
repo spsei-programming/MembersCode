@@ -1,0 +1,44 @@
+class Classroom			//Vytvori novou class Classroom, musi byt v namespace
+	{
+		public int Grade;		//vytvori Field classy Classroom se jmenem Grade a datovym typem int, public(verejny) ze k nemu maj pristup jine tridy
+
+
+		public enum Specializations {Informatics, Electrotechnics} 	//Vytvori enum(myslim ze vyctovy typ) Specializations s moznostmi Informatics a Electrotechnics
+
+
+		public Specializations Specialization;		//u enum se musi znovu vytvorit jako ostatni fieldy, akorat misto typu tam bude nazev toho enum ktery myslis
+
+		
+		public List<Student> Students = new List<Student>(10); //Vytvori list pod jmenem Students do ktereho vkladas veci typu Student, jeho predpokladana velikost je 10
+
+									//Cimz poukazuju, ze muzes vyuzit jine classy jako datovy typ
+
+		public Teacher Teacher		//Vytvori novy field typu Teacher pod jmenem Teacher(myslim, ze se muzou jmenovat stejne, syntax je stejny jako predtim, prvni Teacher je typ, druhy Teacher je jmeno fieldu,)
+						//Samozrejme aby to fungovalo tak musi nekde existovat class Teacher{}
+
+		public void GetName()		//Vytvori metodu/funkci s nazvem GetName co nic nevraci a nema vstupni parametry, syntax myslim identicky jako v C
+			{
+				...
+			}
+
+		teacher.Class = this;		//pokud mas nekde vytvorenou instanci Teacher pod jmenem teacher, ktery ma v sobe field Classroom Class, tak tam nastavi instanci tehle classy(this)
+						//v podstate, "this" poukazuje na instanci tehle classy (ktera jeste neni vytvorena ale bude, napr)
+
+	}
+
+
+
+
+nekde v programu
+
+
+	Classroom class0 = new Classroom();	//vytvori instanci tridy Classroom pod nazvem class0
+
+	class0.Grade = 1;		//nastavi instanci class0 do fieldu Grade cislo 1
+	class0.GetName();		//pouzije metodu GetName pro instanci class0
+
+					//Co se tyka ziskavani fieldu tak tech . tam muze byt mnoho
+					//takze pokud mas vsechny classy nejak pospojovane jako to mam ja(je to kdyztak na githubu)
+					//tak muzes z instance class0 jit klidne do instance teacher, instance student etc
+
+	student0.Class.Teacher.Subject	//napr. tohle, z instance student vezme jeho field Class, z cehoz pak vezme field Teacher(kdo tu tridu uci), z cehoz nakonec vezme co Teacher uci
