@@ -10,6 +10,19 @@ namespace MealsToday.Providers
 {
 	public class UIProvider
 	{
+		public void DisplayMainMenu()
+		{
+			Console.ForegroundColor = ConsoleColor.Cyan;
+			
+			Console.WriteLine("1. Show Meals");
+			Console.WriteLine("2. Place Order For Today");
+			Console.WriteLine("3. Place Order For Tomorrow");
+			Console.WriteLine("4. Show All Orders");
+			Console.WriteLine("5. Show Statistics");
+			
+			Console.ResetColor();
+		}
+				
 		/// <summary>
 		/// Reads the input from main menu layer
 		/// </summary>
