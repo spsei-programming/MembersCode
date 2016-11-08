@@ -22,6 +22,30 @@ namespace MealsToday.Providers
 			
 			Console.ResetColor();
 		}
+		
+		public void DisplaySubMenu(Actions action)
+		{
+			/*
+			switch (action)
+			{
+				case ShowMeals:
+					{
+						var mealsProvider = new MealsProvider();
+						var listOfMeals = mealsProvider.GetDefaultMeals();
+						ShowMeals(listOfMeals);
+					}
+					break;
+				case PlaceOrderForToday:
+					{
+						var orderProvider = new OrdersProvider();
+						var uiProvider = new UIProvider();
+						
+						var uiProvider.ReadSubMenuInput();
+					}
+					break;
+			}
+			*/
+		}
 				
 		/// <summary>
 		/// Reads the input from main menu layer
@@ -174,7 +198,7 @@ namespace MealsToday.Providers
 					}
 					break;
 
-				case Actions.ShowStatistics:
+jsut 				case Actions.ShowStatistics:
 					throw new NotImplementedException("show statistics's sub menu isnt done yet.");
 					break;
 			}
