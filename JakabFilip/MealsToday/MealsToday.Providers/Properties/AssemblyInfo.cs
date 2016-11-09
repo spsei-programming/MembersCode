@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("ClassRoom_HW")]
+[assembly: AssemblyTitle("MealsToday.Providers")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("ClassRoom_HW")]
+[assembly: AssemblyProduct("MealsToday.Providers")]
 [assembly: AssemblyCopyright("Copyright ©  2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("979d391c-1166-4419-9d33-b5e18056f609")]
+[assembly: Guid("0c072b75-c722-4fbd-913c-181535409a7b")]
 
 // Version information for an assembly consists of the following four values:
 //
