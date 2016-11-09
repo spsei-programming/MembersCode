@@ -6,46 +6,53 @@ namespace ClassroomHomework
 	public class Class
 	{
 		public string Name;
-		public Teacher Teacher; //this example expects only one teacher per class
+		//public Teacher Teacher;
 		public List<Student> Students;
 		public Classroom Classroom;
+
+		public Class(string name)
+		{
+			Name = name;
+			Students = new List<Student>(30);
+			Classroom = new Classroom(""); // what a mess
+		}
 
 		public Class(string name, Teacher teacher, List<Student> students, Classroom classroom)
 		{
 			Name = name;
-			Teacher = teacher;
+			//Teacher = teacher;
 			Students = students;
 			Classroom = classroom;
 		}
 
-		public void DumpInfo()
+		/*public void DumpInfo()
 		{
-			Console.WriteLine($"Class: {Name}\nClass teacher: {Teacher.Name}\nClassroom: {Classroom.Id}");
+			Console.WriteLine($"Class: {Name}\nClass teacher: {Teacher.Name}\n#1#Classroom: {Classroom.Id}");
 			Console.WriteLine($"Students:\n");
 
 			foreach (Student student in Students)
 			{
 				Console.WriteLine($"Name: {student.Name}\n" +
-				                  $"Age: {student.Age}\n" +
-				                  $"Field: {student.Field}\n" +
-				                  $"Specialization: {student.Specialization}\n" +
-				                  $"Favourite subject: {student.FavouriteSubject.Name}");
+													$"Age: {student.Age}\n" +
+													$"Field: {student.Field}\n" +
+													$"Specialization: {student.Specialization}\n" +
+													$"Favourite subject: {student.FavouriteSubject.Name}");
 				if (student.IsInLesson) Console.WriteLine($"Is in lesson: {student.HasLesson.Name}");
 			}
 			Console.WriteLine("------------------------");
-		}
+		}*/
 
 		public void AddStudent(Student student)
 		{
 			Students.Add(student);
 		}
 
-		public void AssignTeacher(Teacher teacher)
+		/*public void AssignTeacher(Teacher teacher)
 		{
 			Teacher = teacher;
-		}
+		}*/
 
-		public void StartLesson(Subject subject)
+		/*public void StartLesson(Subject subject)
 		{
 			if (Teacher.IsTeaching || Classroom.IsUsed)
 				return;
@@ -71,6 +78,6 @@ namespace ClassroomHomework
 				student.IsInLesson = false;
 				student.HasLesson = null;
 			}
-		}
+		}*/
 	}
 }
