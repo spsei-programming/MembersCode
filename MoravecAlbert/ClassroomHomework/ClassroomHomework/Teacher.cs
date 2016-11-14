@@ -7,7 +7,7 @@ namespace ClassroomHomework
 		public List<Subject> Subjects;
 		public bool IsTeaching;
 
-		public Teacher(string name, int age, Genders gender, List<Subject> subjects) : base(name, age, gender)
+		public Teacher(string firstName, string lastName, int age, Genders gender, List<Subject> subjects) : base(firstName, lastName, age, gender)
 		{
 			Subjects = subjects;
 		}

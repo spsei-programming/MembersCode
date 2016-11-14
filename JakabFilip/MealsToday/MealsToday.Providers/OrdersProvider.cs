@@ -27,5 +27,19 @@ namespace MealsToday.Providers
 
 			return mealToOrder;
 		}
+
+		public List<MealOrder> GetOrdersByDate(List<MealOrder> listOfMeals, DateTime date)
+		{
+			var sortedListOfOrders = listOfMeals.OrderBy(x => x.Date.Month == date.Month).ThenBy(x => x.Date.Day == date.Day).ToList();
+
+			return sortedListOfOrders;
+		}
+
+		public List<MealOrder> GetOrdersByUserName(List<MealOrder> listOfMeals, string userName)
+		{
+			var sortedList = listOfMeals.OrderBy(x => x.UserName == userName).ToList();
+
+			return sortedList;
+		}
 	}
 }

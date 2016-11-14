@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{508E2E3B-A046-41BF-95A9-048C9AA8EABD}</ProjectGuid>
+    <ProjectGuid>{8ABC42E5-ABC4-48FD-91F8-9D8AC2E0F7AA}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ClassroomHomework</RootNamespace>
-    <AssemblyName>ClassroomHomework</AssemblyName>
+    <RootNamespace>MealsToday</RootNamespace>
+    <AssemblyName>MealsToday</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -32,9 +32,6 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup>
-    <NoWin32Manifest>true</NoWin32Manifest>
-  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -46,19 +43,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class.cs" />
-    <Compile Include="Classroom.cs" />
-    <Compile Include="Helper.cs" />
-    <Compile Include="Person.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Student.cs" />
-    <Compile Include="Subject.cs" />
-    <Compile Include="Teacher.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MealsToday.Data\MealsToday.Data.csproj">
+      <Project>{63f0cfa6-93ca-4a2b-a471-57e791811610}</Project>
+      <Name>MealsToday.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MealsToday.Providers\MealsToday.Providers.csproj">
+      <Project>{8e7ff1db-63d8-463b-b034-98956f76a65c}</Project>
+      <Name>MealsToday.Providers</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
