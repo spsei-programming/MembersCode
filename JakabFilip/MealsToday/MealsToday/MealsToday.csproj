@@ -49,6 +49,16 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MealsToday.Data\MealsToday.Data.csproj">
+      <Project>{5fa600d7-268b-4bdd-8f93-40c83e9e6ec6}</Project>
+      <Name>MealsToday.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MealsToday.Providers\MealsToday.Providers.csproj">
+      <Project>{0c072b75-c722-4fbd-913c-181535409a7b}</Project>
+      <Name>MealsToday.Providers</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
