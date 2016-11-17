@@ -1,21 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 using MealsToday.Data;
 using MealsToday.Data.Enums;
 using MealsToday.Data.Classes;
 
 namespace MealsToday.Providers
 {
-	public class UIProvider
+	public static class UIProvider
 	{
-		/// <summary>
-		/// Reads the input from main menu layer
-		/// </summary>
-		/// <returns>returns a value of Actions enum</returns>
-		public Actions ReadMainInput()
+		public static Actions ReadMainInput()
 		{
 			Console.Write("Action(number): ");
 			var input = Console.ReadLine().ToLower();
@@ -49,7 +48,7 @@ namespace MealsToday.Providers
 		/// Reads the submenu input; also handles commands and arguments
 		/// </summary>
 		/// <param name="action">Actual submenu layer</param>
-		public SubMenuClass ReadSubMenuInput(Actions action)
+		public static SubMenuClass ReadSubMenuInput(Actions action)
 		{
 			var classToreturn = new SubMenuClass();
 
@@ -84,6 +83,11 @@ namespace MealsToday.Providers
 									DisplaySyntaxHelp(action);
 								}
 								break;
+							case "exit":
+								{
+									classToreturn.Action = SubMenuActions.Exit;
+								}
+								break;
 							default:
 								DisplaySyntaxHelp(action);
 								break;
@@ -91,7 +95,34 @@ namespace MealsToday.Providers
 					}
 					break;
 				case Actions.PlaceOrderForToday:
-					throw new NotImplementedException();
+					{
+						Console.Write("Enter args: ");
+						var args = Console.ReadLine().ToLower().Split(' ');
+
+						switch (args[0])
+						{
+							case "help":
+								{
+									DisplaySyntaxHelp(action);
+									classToreturn.Action = SubMenuActions.NullAction;
+								}
+								break;
+							case "exit":
+								{
+									classToreturn.Action = SubMenuActions.Exit;
+									return classToreturn;
+								}
+						}
+
+						int mealId;
+						if (int.TryParse(args[1], out mealId))
+						{
+							Console.WriteLine("Entered argument(meal id) isnt number\nIt must be a nubmer");
+							DisplaySyntaxHelp(action);
+						}
+
+						OrdersProvider.OrderMeal(args[0], mealId);
+					}
 					break;
 				case Actions.PlaceOrderForTomorrow:
 					throw new NotImplementedException();
@@ -103,11 +134,11 @@ namespace MealsToday.Providers
 					throw new NotImplementedException();
 					break;
 			}
-
+			Console.ReadKey(true);
 			return classToreturn;
 		}
 
-		public void DisplaySyntaxHelp(Actions action)
+		public static void DisplaySyntaxHelp(Actions action)
 		{
 			switch (action)
 			{
@@ -135,7 +166,7 @@ namespace MealsToday.Providers
 			}
 		}
 
-		public void DisplayMainMenu()
+		public static void DisplayMainMenu()
 		{
 			Console.Clear();
 			Console.WriteLine("1. Show Meals");
@@ -146,29 +177,38 @@ namespace MealsToday.Providers
 			Console.WriteLine("exit -> End Program");
 		}
 
-		public void DisplayAction(Actions action, List<MealOrder> ordersToday, List<MealOrder> ordersTomorrow)
+		public static void DisplayAction(Actions action)
 		{
-			var mealProvider = new MealsProvider();
-			//var orderProvider = new OrdersProvider();
-
 			switch (action)
 			{
 				case Actions.ShowMeals:
-					ShowMeals(mealProvider.GetDefaultMeals());
+					ShowMeals(MealsProvider.GetDefaultMeals());
 					break;
 				case Actions.PlaceOrderForToday:
 					break;
 				case Actions.PlaceOrderForTomorrow:
 					break;
 				case Actions.ShowAllOrders:
-					ShowAllOrders(ordersToday, ordersTomorrow);
+					ShowAllOrders();
 					break;
 				case Actions.ShowStatistics:
 					break;
 			}
 		}
 
-		public void ShowMeals(List<Meal> mealsToDisplay)
+		public static void DisplaySubeMenuAction(SubMenuClass subMenu)
+		{
+			switch (subMenu.Action)
+			{
+				case SubMenuActions.ShowDetailedMeal:
+					ShowDetailedMeal(subMenu.MealId);
+					break;
+				case SubMenuActions.OrderMeal:
+					break;
+			}
+		}
+
+		public static void ShowMeals(List<Meal> mealsToDisplay)
 		{
 			Console.Clear();
 			Console.ForegroundColor = ConsoleColor.Blue;
@@ -179,7 +219,7 @@ namespace MealsToday.Providers
 			Console.ResetColor();
 		}
 
-		public void ShowDetailedMeal(List<Meal> listOfMeals, int mealId)
+		public static void ShowDetailedMeal(int mealId)
 		{
 			if (mealId < 0)
 			{
@@ -189,17 +229,31 @@ namespace MealsToday.Providers
 				return;
 			}
 
-			var meal = listOfMeals.FirstOrDefault(x => x.Id == mealId);
+			Meal meal = null;
+			try
+			{
+				var xmlSerializer = new XmlSerializer(typeof(List<Meal>));
+				using (Stream stream = File.OpenRead(@"Lists\MealList.xml"))
+				{
+					var list = xmlSerializer.Deserialize(stream) as List<Meal>;
+					meal = list.FirstOrDefault(x => x.Id == mealId);
+				}
+			}
+			catch (DirectoryNotFoundException e)
+			{
+				Console.WriteLine("Directory not found. \n {0}", e.Message);
+			}
+
 			if (meal == null)
 			{
-				Console.WriteLine("no meal found with this ID({0})\n" +
-													"Press any key to continue", mealId);
+				Console.WriteLine("Meal not found.");
 				Console.ReadKey(true);
 				return;
 			}
 
 			Console.Clear();
-			Console.WriteLine($"ID: {meal.Id} Name: {meal.Name}");
+			Console.WriteLine($"ID: {meal.Id}\n" +
+												$"Name: {meal.Name}");
 			Console.WriteLine("Alergens:");
 			foreach (var alergen in meal.Alergends)
 				Console.Write($" {alergen}");
@@ -210,8 +264,33 @@ namespace MealsToday.Providers
 			Console.ReadKey(true);
 		}
 
-		public void ShowAllOrders(List<MealOrder> orderedMeals, List<MealOrder> orderedMealsTomorrow)
+		public static void ShowAllOrders()
 		{
+			var xmlSerializer = new XmlSerializer(typeof(MealOrder));
+
+			List<MealOrder> orderedMeals;
+			List<MealOrder> orderedMealsTomorrow;
+
+			using (Stream stream = File.OpenRead(@"Lists\OrdersList.xml"))
+			{
+				orderedMeals = xmlSerializer.Deserialize(stream) as List<MealOrder>;
+			}
+			using (Stream stream = File.OpenRead(@"Lists\TomorrowOrdersList.xml"))
+			{
+				orderedMealsTomorrow = xmlSerializer.Deserialize(stream) as List<MealOrder>;
+			}
+
+			if (orderedMeals == null)
+			{
+				Console.WriteLine("There are no ordered Meals");
+				return;
+			}
+
+			if (orderedMealsTomorrow == null)
+			{
+				Console.WriteLine("There are no ordered Meals for Tomorrow");
+			}
+
 			Console.ForegroundColor = ConsoleColor.Blue;
 
 			Console.WriteLine("Already ordered meals:");

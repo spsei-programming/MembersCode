@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MealsToday.Data;
 using MealsToday.Data.Classes;
 using MealsToday.Data.Enums;
+using MealsToday.Helpers;
 using MealsToday.Providers;
 
 namespace MealsToday
@@ -14,74 +16,42 @@ namespace MealsToday
 	{
 		public static void Main(string[] args)
 		{
-			var uiProvider = new UIProvider();
-			var mealsProvider = new MealsProvider();
+			//					--- File Names ---
+			// Lists\MealList.xml - custom list of Meals
+			// Lists\DefaultMealList.xml - list of Default Meals
+			// Lists\OrdersList.xml - list of orders
+			//Lists\TomorrowOrdersList - list of orders for tomorrow
 
-			var listOfOrdersToday = new List<MealOrder>();
-			var listOfOrdersTomorrow = new List<MealOrder>();
+			if (!Directory.Exists(@"Lists")) Directory.CreateDirectory(@"Lists");
 
-			Actions mainInput = Actions.NullAction;
+			FileHelper.FillDefaultMealFile();
+			FileHelper.FillMealList();
 
 			do
 			{
-				try
+				Actions mainInput;
+
+				Console.Clear();
+				UIProvider.DisplayMainMenu();
+
+				do
 				{
-					uiProvider.DisplayMainMenu();
+					mainInput = UIProvider.ReadMainInput();
+				} while (mainInput == Actions.NullAction);
 
-					do
-					{
-						mainInput = uiProvider.ReadMainInput();
-					} while (mainInput == Actions.NullAction);
+				if (mainInput == Actions.Exit) break;
 
-					if (mainInput == Actions.Exit)
-						break;
+				UIProvider.DisplayAction(mainInput);
 
-					uiProvider.DisplayAction(mainInput, listOfOrdersToday, listOfOrdersTomorrow);
+				var subMenuInput = UIProvider.ReadSubMenuInput(mainInput);
 
-					SubMenuClass subMenuInput;
-					do
-					{
-						subMenuInput = uiProvider.ReadSubMenuInput(mainInput);
-					} while (subMenuInput.Action == SubMenuActions.NullAction);
+				if (subMenuInput.Action == SubMenuActions.Exit) break;
 
-					switch (mainInput)
-					{
-						case Actions.ShowMeals:
-							switch (subMenuInput.Action)
-							{
-								case SubMenuActions.ShowDetailedMeal:
-									uiProvider.ShowDetailedMeal(mealsProvider.GetDefaultMeals(), subMenuInput.MealId);
-									break;
-								case SubMenuActions.OrderMeal:
-									break;
-								case SubMenuActions.Exit:
-									mainInput = Actions.Exit;
-									break;
-								case SubMenuActions.BackToMainMenu:
-									break;
-							}
-							break;
-						case Actions.Exit:
-							break;
-						default:
-							Console.WriteLine("Error in entering main input.\n" +
-																"Press any key to continue");
-							Console.ReadKey(false);
-							break;
-					}
-				}
-				catch (NotImplementedException)
-				{
-					Console.ForegroundColor = ConsoleColor.Red;
-					Console.WriteLine("This part isnt done yet\n" +
-					                  "Press any key to continue");
-					Console.ReadKey(true);
-					Console.ResetColor();
-				}
-			} while (mainInput != Actions.Exit);
+				UIProvider.DisplaySubeMenuAction(subMenuInput);
+			} while (true);
 
-			Console.WriteLine("Program is about to be terminated\n" +
-												"Press any key to Continue");
+			Console.WriteLine("See ya next time\n" +
+			                  "Press any key to continue");
 
 			Console.ReadKey(true);
 		}

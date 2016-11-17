@@ -1,43 +1,61 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 using MealsToday.Data;
 
 namespace MealsToday.Providers
 {
 	public class OrdersProvider
 	{
-		/// <summary>
-		/// Sets a new Meal Order
-		/// </summary>
-		/// <param name="username">custommers name</param>
-		/// <param name="meal">Ordered Meal</param>
-		/// <returns>returns a MealOrder Object</returns>
-		public MealOrder OrderMeal(string username, Meal meal)
+		public static void OrderMeal(string userName, int mealId)
 		{
 			var orderDate = new DateTime();
-			var mealToOrder = new MealOrder()
+			var mealToOrder = new MealOrder
 			{
-				UserName = username,
-				Id = meal.Id,
+				UserName = userName,
+				Id = mealId,
 				Date = orderDate
 			};
 
-			return mealToOrder;
+			var xmlSerializer = new XmlSerializer(typeof(List<MealOrder>));
+			List<MealOrder> listOfMealOrders;
+
+			using (Stream stream = File.OpenRead(@"Lists\OrdersList.xml"))
+			{
+				listOfMealOrders = xmlSerializer.Deserialize(stream) as List<MealOrder>;
+			}
+			listOfMealOrders.Add(mealToOrder);
+			using (Stream stream = File.OpenWrite(@"Lists\OrdersList"))
+			{
+				xmlSerializer.Serialize(stream, listOfMealOrders);
+			}
 		}
 
-		public List<MealOrder> GetOrdersByDate(List<MealOrder> listOfMeals, DateTime date)
+		public static List<MealOrder> GetOrdersByDate(DateTime date)
 		{
-			var sortedListOfOrders = listOfMeals.OrderBy(x => x.Date.Month == date.Month).ThenBy(x => x.Date.Day == date.Day).ToList();
-
-			return sortedListOfOrders;
+			var xmlSerializer = new XmlSerializer(typeof(List<MealOrder>));
+			var list = new List<MealOrder>();
+			using (Stream stream = File.OpenRead(@"Lists\OrdersList.xml"))
+			{
+				list = xmlSerializer.Deserialize(stream) as List<MealOrder>;
+			}
+			return list.Where(x => x.Date.Month == date.Month && x.Date.Day == date.Day).OrderBy(x => x.Date).ToList();
 		}
 
-		public List<MealOrder> GetOrdersByUserName(List<MealOrder> listOfMeals, string userName)
+		public static List<MealOrder> GetOrdersByUserName(string userName)
 		{
-			var sortedList = listOfMeals.OrderBy(x => x.UserName == userName).ToList();
+			List<MealOrder> ordersList;
+			var xmlSerializer = new XmlSerializer(typeof(List<MealOrder>));
+			using (Stream stream = File.OpenRead(@"Lists\OrdersList.xml"))
+			{
+				ordersList = xmlSerializer.Deserialize(stream) as List<MealOrder>;
+			}
+
+			var sortedList = ordersList.Where(x => x.UserName == userName).ToList();
 
 			return sortedList;
 		}
