@@ -28,11 +28,13 @@ namespace MealsToday.Providers
 			return mealToOrder;
 		}
 
-		public List<MealOrder> GetOrdersByDate(List<MealOrder> listOfMeals, DateTime date)
+		public List<MealOrder> GetOrdersByDate(List<MealOrder> orders, DateTime date)
 		{
-			var sortedListOfOrders = listOfMeals.OrderBy(x => x.Date.Month == date.Month).ThenBy(x => x.Date.Day == date.Day).ToList();
-
-			return sortedListOfOrders;
+			return orders
+				.Where(x=>x.Date.Month==date.Month)
+				.OrderBy(x => x.Date.Month == date.Month)
+				.ThenBy(x => x.Date.Day == date.Day)
+				.ToList();
 		}
 
 		public List<MealOrder> GetOrdersByUserName(List<MealOrder> listOfMeals, string userName)

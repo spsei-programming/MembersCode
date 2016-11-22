@@ -134,7 +134,7 @@ namespace SkolniTridaV2
 			int studentAge = Convert.ToInt32(Console.ReadLine());
 
 			Console.WriteLine("Student Gender(M / F)?");
-			char studentGender = Convert.ToChar(Console.ReadLine()[0]);
+			char studentGender = Convert.ToChar(Console.ReadLine().ToUpper()[0]);
 
 			Student student = new Student();
 
@@ -146,15 +146,14 @@ namespace SkolniTridaV2
 			{
 				student.Gender = Genders.Woman;
 			}
-
-
+			
 			student.FirstName = studentFirstName;
 			student.Surname = studentSurname;
 			student.Age = studentAge;
 
 			foreach (SchoolClass schoolClass in schoolClasses)
 			{
-				if ((studentClass) == (schoolClass.Name))
+				if (studentClass.Equals(schoolClass.Name, StringComparison.InvariantCultureIgnoreCase))
 				{
 					schoolClass.Students.Add(student);
 				}
@@ -221,7 +220,8 @@ namespace SkolniTridaV2
 			{
 				if (whichStudent == student.Surname)
 				{
-					toremove = student;
+					students.Remove(student);
+					//toremove = student;
 				}
 			}
 			foreach (SchoolClass schoolClass in schoolClasses)
