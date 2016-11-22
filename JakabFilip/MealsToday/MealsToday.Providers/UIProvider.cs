@@ -1,22 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 using MealsToday.Data;
 using MealsToday.Data.Enums;
+using MealsToday.Data.Classes;
 
 namespace MealsToday.Providers
 {
-	public class UIProvider
+	public static class UIProvider
 	{
-		/// <summary>
-		/// Reads the input from main menu layer
-		/// </summary>
-		/// <returns>returns a value of Actions enum</returns>
-		public Actions ReadMainInput()
+		public static Actions ReadMainInput()
 		{
-			Console.Clear();
 			Console.Write("Action(number): ");
 			var input = Console.ReadLine().ToLower();
 
@@ -49,40 +48,249 @@ namespace MealsToday.Providers
 		/// Reads the submenu input; also handles commands and arguments
 		/// </summary>
 		/// <param name="action">Actual submenu layer</param>
-		public SubMenuActions ReadSubMenuInput(Actions action)
+		public static SubMenuClass ReadSubMenuInput(Actions action)
 		{
-			return SubMenuActions.NullAction;
+			var classToreturn = new SubMenuClass();
+
+			switch (action)
+			{
+				case Actions.ShowMeals:
+					{
+						Console.Write("Enter Action: ");
+						var args = Console.ReadLine().ToLower().Split(' ');
+
+						switch (args[0])
+						{
+							case "detail":
+								{
+									int tmpValue;
+									if (!int.TryParse(args[1], out tmpValue))
+									{
+										DisplaySyntaxHelp(action);
+									}
+									else
+									{
+										classToreturn.MealId = tmpValue;
+										classToreturn.Action = SubMenuActions.ShowDetailedMeal;
+									}
+								}
+								break;
+							case "order":
+								throw new NotImplementedException();
+								break;
+							case "help":
+								{
+									DisplaySyntaxHelp(action);
+								}
+								break;
+							case "exit":
+								{
+									classToreturn.Action = SubMenuActions.Exit;
+								}
+								break;
+							default:
+								DisplaySyntaxHelp(action);
+								break;
+						}
+					}
+					break;
+				case Actions.PlaceOrderForToday:
+					{
+						Console.Write("Enter args: ");
+						var args = Console.ReadLine().ToLower().Split(' ');
+
+						switch (args[0])
+						{
+							case "help":
+								{
+									DisplaySyntaxHelp(action);
+									classToreturn.Action = SubMenuActions.NullAction;
+								}
+								break;
+							case "exit":
+								{
+									classToreturn.Action = SubMenuActions.Exit;
+									return classToreturn;
+								}
+						}
+
+						int mealId;
+						if (int.TryParse(args[1], out mealId))
+						{
+							Console.WriteLine("Entered argument(meal id) isnt number\nIt must be a nubmer");
+							DisplaySyntaxHelp(action);
+						}
+
+						OrdersProvider.OrderMeal(args[0], mealId);
+					}
+					break;
+				case Actions.PlaceOrderForTomorrow:
+					throw new NotImplementedException();
+					break;
+				case Actions.ShowAllOrders:
+					throw new NotImplementedException();
+					break;
+				case Actions.ShowStatistics:
+					throw new NotImplementedException();
+					break;
+			}
+			Console.ReadKey(true);
+			return classToreturn;
 		}
 
-		public void ShowMeals(List<Meal> mealsToDisplay)
+		public static void DisplaySyntaxHelp(Actions action)
+		{
+			switch (action)
+			{
+				case Actions.ShowMeals:
+					Console.WriteLine("Valid Syntax: [command] [argument]\n" +
+														"Commands: 'detail', 'order', 'help'\n" +
+														"Argument: The Meal's ID");
+					break;
+				case Actions.PlaceOrderForToday:
+					Console.WriteLine("Valid Syntax: [username] [argument]\n" +
+														"Argument: Meal's ID");
+					break;
+				case Actions.PlaceOrderForTomorrow:
+					Console.WriteLine("Valid Syntax: [username] [argument]\n" +
+														"Argument: Meal's ID");
+					break;
+				case Actions.ShowAllOrders:
+					Console.WriteLine("Valid Syntax: [command]\n" +
+														"Commands: '0', 'exit'");
+					break;
+				case Actions.ShowStatistics:
+					Console.WriteLine("Valid Syntax: [command]\n" +
+														"Commands: '0', 'exit'");
+					break;
+			}
+		}
+
+		public static void DisplayMainMenu()
+		{
+			Console.Clear();
+			Console.WriteLine("1. Show Meals");
+			Console.WriteLine("2. Order Meal For Today");
+			Console.WriteLine("3. Order Meal For Tomorrow");
+			Console.WriteLine("4. Show All Orders");
+			Console.WriteLine("5. Show Statistics");
+			Console.WriteLine("exit -> End Program");
+		}
+
+		public static void DisplayAction(Actions action)
+		{
+			switch (action)
+			{
+				case Actions.ShowMeals:
+					ShowMeals(MealsProvider.GetDefaultMeals());
+					break;
+				case Actions.PlaceOrderForToday:
+					break;
+				case Actions.PlaceOrderForTomorrow:
+					break;
+				case Actions.ShowAllOrders:
+					ShowAllOrders();
+					break;
+				case Actions.ShowStatistics:
+					break;
+			}
+		}
+
+		public static void DisplaySubeMenuAction(SubMenuClass subMenu)
+		{
+			switch (subMenu.Action)
+			{
+				case SubMenuActions.ShowDetailedMeal:
+					ShowDetailedMeal(subMenu.MealId);
+					break;
+				case SubMenuActions.OrderMeal:
+					break;
+			}
+		}
+
+		public static void ShowMeals(List<Meal> mealsToDisplay)
 		{
 			Console.Clear();
 			Console.ForegroundColor = ConsoleColor.Blue;
 			foreach (var meal in mealsToDisplay)
 			{
-				Console.WriteLine($"ID: {meal.Id} \t\tName: {meal.Name}");
+				Console.WriteLine($"ID: {meal.Id} \tName: {meal.Name}");
 			}
-
-			Console.ReadKey(false);
+			Console.ResetColor();
 		}
 
-		public void ShowDetailedMeal(Meal meal)
+		public static void ShowDetailedMeal(int mealId)
 		{
-			if (meal == null) return;
+			if (mealId < 0)
+			{
+				Console.WriteLine("Error has Occured. meal ID is not valid.\n" +
+													"Press any key to continue");
+				Console.ReadKey(true);
+				return;
+			}
+
+			Meal meal = null;
+			try
+			{
+				var xmlSerializer = new XmlSerializer(typeof(List<Meal>));
+				using (Stream stream = File.OpenRead(@"Lists\MealList.xml"))
+				{
+					var list = xmlSerializer.Deserialize(stream) as List<Meal>;
+					meal = list.FirstOrDefault(x => x.Id == mealId);
+				}
+			}
+			catch (DirectoryNotFoundException e)
+			{
+				Console.WriteLine("Directory not found. \n {0}", e.Message);
+			}
+
+			if (meal == null)
+			{
+				Console.WriteLine("Meal not found.");
+				Console.ReadKey(true);
+				return;
+			}
 
 			Console.Clear();
-			Console.WriteLine($"ID: {meal.Id} Name: {meal.Name}");
+			Console.WriteLine($"ID: {meal.Id}\n" +
+												$"Name: {meal.Name}");
 			Console.WriteLine("Alergens:");
 			foreach (var alergen in meal.Alergends)
 				Console.Write($" {alergen}");
 
-			Console.WriteLine($"Calories: {meal.Calories}");
+			Console.WriteLine($"\nCalories: {meal.Calories}");
 
-			Console.ReadKey(false);
+			Console.WriteLine("Press any key to continue");
+			Console.ReadKey(true);
 		}
 
-		public void ShowAllOrders(List<MealOrder> orderedMeals, List<MealOrder> orderedMealsTomorrow)
+		public static void ShowAllOrders()
 		{
+			var xmlSerializer = new XmlSerializer(typeof(MealOrder));
+
+			List<MealOrder> orderedMeals;
+			List<MealOrder> orderedMealsTomorrow;
+
+			using (Stream stream = File.OpenRead(@"Lists\OrdersList.xml"))
+			{
+				orderedMeals = xmlSerializer.Deserialize(stream) as List<MealOrder>;
+			}
+			using (Stream stream = File.OpenRead(@"Lists\TomorrowOrdersList.xml"))
+			{
+				orderedMealsTomorrow = xmlSerializer.Deserialize(stream) as List<MealOrder>;
+			}
+
+			if (orderedMeals == null)
+			{
+				Console.WriteLine("There are no ordered Meals");
+				return;
+			}
+
+			if (orderedMealsTomorrow == null)
+			{
+				Console.WriteLine("There are no ordered Meals for Tomorrow");
+			}
+
 			Console.ForegroundColor = ConsoleColor.Blue;
 
 			Console.WriteLine("Already ordered meals:");
@@ -91,12 +299,11 @@ namespace MealsToday.Providers
 			{
 				Console.WriteLine($"username: {meal.Name}\tmeal ID: {meal.Id}");
 			}
-
 			Console.ForegroundColor = ConsoleColor.White;
 
 			Console.WriteLine("Meals ordered for tomorrow:");
 			var sortedListTomorrow = orderedMealsTomorrow.OrderBy(x => x.Date);
-			foreach (var meal in orderedMealsTomorrow)
+			foreach (var meal in sortedListTomorrow)
 			{
 				Console.WriteLine($"Username: {meal.UserName}\tmeal ID: {meal.Id}");
 			}

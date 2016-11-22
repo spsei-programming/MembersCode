@@ -1,83 +1,52 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 using MealsToday.Data;
 
 namespace MealsToday.Providers
 {
-	public class MealsProvider
+	public static class MealsProvider
 	{
-		public List<Meal> GetDefaultMeals()
+		public static List<Meal> GetDefaultMeals()
 		{
-			var mealList = new List<Meal>
+			var xmlSerializer = new XmlSerializer(typeof(List<Meal>));
+
+			using (Stream stream = File.OpenRead(@"Lists\DefaultMealList.xml"))
 			{
-				new Meal
+				return xmlSerializer.Deserialize(stream) as List<Meal>;
+			}
+		}
+
+		public static void AddMealToDailyMeals(Meal meal)
+		{
+			var xmlSerializer = new XmlSerializer(typeof(Meal));
+			using (Stream readStream = File.OpenRead(@"Lists\MealList.xml"))
+			{
+				var existingList = xmlSerializer.Deserialize(readStream) as List<Meal>;
+				existingList.Add(meal);
+				using (Stream writeStream = File.OpenWrite(@"Lists\MealList.xml"))
 				{
-					Id = 0,
-					Name = "Knedlo vepro zelo",
-					Calories = 6523,
-					Alergends = {1, 7, 8}
-				},
-				new Meal
-				{
-					Id = 1,
-					Name = "Kureci vyvar",
-					Calories = 3500,
-					Alergends = {4, 5, 8}
-				},
-				new Meal
-				{
-					Id = 2,
-					Name = "Palacinky na sladko",
-					Calories = 5125,
-					Alergends = {7, 8, 9}
-				},
-				new Meal
-				{
-					Id = 3,
-					Name = "Kureci rizek s brambory",
-					Calories = 4750,
-					Alergends = {1, 6, 9}
+					xmlSerializer.Serialize(writeStream, existingList);
 				}
-			};
-
-			return mealList;
+			}
 		}
 
-		/// <summary>
-		/// Adds new Meal to the already existing list
-		/// </summary>
-		/// <param name="actualMealList">an existing list</param>
-		/// <param name="meal">Meal to be added to the existing list</param>
-		/// <returns></returns>
-		public List<Meal> AddMealToDailyMeals(List<Meal> actualMealList, Meal meal)
+		public static void RemoveMealFromDailyMeals(Meal meal)
 		{
-			actualMealList.Add(meal);
-
-			return actualMealList;
-		}
-
-		/// <summary>
-		/// Removes Meal from the existing list 
-		/// </summary>
-		/// <param name="actualMealList">an existing list</param>
-		/// <param name="meal">Meal to be removed from the existing list</param>
-		/// <returns></returns>
-		public List<Meal> RemoveMealFromDailyMeals(List<Meal> actualMealList, Meal meal)
-		{
-			try
+			var xmlSerializer = new XmlSerializer(typeof(Meal));
+			using (Stream readStream = File.OpenRead(@"Lists\MealList.xml"))
 			{
-				actualMealList.Remove(meal);
+				var existingList = xmlSerializer.Deserialize(readStream) as List<Meal>;
+				existingList.Remove(meal);
+				using (Stream writeStream = File.OpenWrite(@"Lists\MealList.xml"))
+				{
+					xmlSerializer.Serialize(writeStream, existingList);
+				}
 			}
-			catch (Exception)
-			{
-				Console.WriteLine("The Following Meal isnt in the List of Daily Meals");
-				return null;
-			}
-
-			return actualMealList;
 		}
 	}
 }
