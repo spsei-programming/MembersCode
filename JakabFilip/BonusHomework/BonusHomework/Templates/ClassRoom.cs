@@ -17,7 +17,11 @@ namespace BonusHomework.Templates
 		public List<Student> students;
 		public Teacher teacher;
 
-		public ClassRoom() { }
+		public ClassRoom()
+		{
+			students = new List<Student>(30);
+			teacher = new Teacher();
+		}
 
 		public ClassRoom(string name, MemberTypes memberType, Orientations classOrientation, byte level)
 		{

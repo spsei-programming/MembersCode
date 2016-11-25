@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClassRoom_HW", "ClassRoom_HW\ClassRoom_HW.csproj", "{508E2E3B-A046-41BF-95A9-048C9AA8EABD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClassroomHomework", "ClassroomHomework\ClassroomHomework.csproj", "{508E2E3B-A046-41BF-95A9-048C9AA8EABD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

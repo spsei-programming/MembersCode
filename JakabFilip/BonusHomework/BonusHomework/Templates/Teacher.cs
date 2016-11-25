@@ -10,6 +10,8 @@ namespace BonusHomework.Templates
 	{
 		public Subject subject;
 
+		public Teacher() { }
+
 		public Teacher(int id, string name, int age, Subject mainSubject)
 		{
 			this.id = id;
