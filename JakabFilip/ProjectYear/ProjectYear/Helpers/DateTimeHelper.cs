@@ -7,7 +7,7 @@ namespace ProjectYear.Helpers
 	{
 		public static string GetMonthName(DateTime date)
 		{
-			return CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(date.Month);
+			return date.ToString("MMMM");
 		}
 	}
 }
