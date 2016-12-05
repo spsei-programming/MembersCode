@@ -8,7 +8,7 @@ namespace MealsToday.Data
 		public string Name { get; set; }
 		public string Description { get; set; }
 
-		public short Calories { get; set; }
+		public int Calories { get; set; }
 
 		public List<Allergen> Allergens { get; set; } = new List<Allergen>();
 	}

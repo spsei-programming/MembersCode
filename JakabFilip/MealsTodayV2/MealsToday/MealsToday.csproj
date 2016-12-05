@@ -34,6 +34,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -46,6 +47,7 @@
     <Compile Include="Data\Allergen.cs" />
     <Compile Include="Data\Meal.cs" />
     <Compile Include="Data\User.cs" />
+    <Compile Include="Enums\FileTypes.cs" />
     <Compile Include="Enums\UserRoles.cs" />
     <Compile Include="Helpers\Context.cs" />
     <Compile Include="Helpers\CSVLoader.cs" />

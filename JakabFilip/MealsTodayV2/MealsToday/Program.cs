@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MealsToday.Data;
+using MealsToday.Enums;
 using MealsToday.Helpers;
 
 namespace MealsToday
@@ -13,9 +14,21 @@ namespace MealsToday
 	{
 		public static void Main(string[] args)
 		{
-			var users = CSVLoader.LoadUserData(@"");
-			Context.AllUsers = users;
 			LogIn();
+
+			Console.WriteLine("Current User: {0}", Context.CurrentUser);
+		}
+
+		public static void Initialize()
+		{
+			var users = CSVLoader.LoadUserData(CSVLoader.GetCSVPath(FileTypes.Users));
+			Context.AllUsers = users;
+
+			var meals = CSVLoader.LoadMealData(CSVLoader.GetCSVPath(FileTypes.Meals));
+			Context.Meals = meals;
+
+			var allergens = CSVLoader.LoadAllergenData(CSVLoader.GetCSVPath(FileTypes.Allergens));
+			Context.Allergens = allergens;
 		}
 
 		public static void LogIn()

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Net;
 using System.Runtime.CompilerServices;
@@ -58,14 +59,25 @@ namespace MealsToday.Helpers
 
 		private static Allergen parseAllergenRow(string row)
 		{
-			return new Allergen();
+			Allergen allergen = new Allergen();
+
+			string[] pom = row.Split(';');
+			allergen.AllergenId = Convert.ToInt32(pom[0]);
+			allergen.Name = pom[1];
+			return allergen;
 		}
 
 		private static Meal parseMealRow(string row)
 		{
-			var dataParts = row.Split(';');
+			Meal meal = new Meal();
 
-			return new Meal();
+			string[] pom = row.Split(';');
+			meal.MealId = Convert.ToInt32(pom[0]);
+			meal.Name = pom[1];
+			meal.Description = pom[2];
+			meal.Calories = Convert.ToInt32(pom[3]);
+
+			return meal;
 		}
 
 		public static List<User> LoadUserData(string filePath)
@@ -91,12 +103,51 @@ namespace MealsToday.Helpers
 		public static List<Allergen> LoadAllergenData(string filePath)
 		{
 
-			return new List<Allergen>();
+			List<Allergen> allergens = new List<Allergen>(20);
+			if (!File.Exists(filePath))
+			{
+				throw new FileNotFoundException("File not found");
+			}
+			var allLines = File.ReadAllLines(filePath);
+			for (int i = 1; i < allLines.Length; i++)
+			{
+				allergens.Add(parseAllergenRow(allLines[i]));
+			}
+			return allergens;
 		}
 
 		public static List<Meal> LoadMealData(string filePath)
 		{
-			return new List<Meal>();
+			List<Meal> meals = new List<Meal>(20);
+			if (!File.Exists(filePath))
+			{
+				throw new FileNotFoundException("File not found");
+			}
+			var allLines = File.ReadAllLines(filePath);
+			for (int i = 1; i < allLines.Length; i++)
+			{
+				meals.Add(parseMealRow(allLines[i]));
+			}
+			return meals;
+		}
+
+		public static string GetCSVPath(FileTypes fileType)
+		{
+			var baseDirectory = ConfigurationManager.AppSettings["CSVFilesFolder"];
+
+			switch (fileType)
+			{
+				case FileTypes.Meals:
+					return Path.Combine(baseDirectory, "Meals.csv");
+				case FileTypes.Users:
+					return Path.Combine(baseDirectory, "Users.csv");
+				case FileTypes.Orders:
+					return Path.Combine(baseDirectory, "Orders.csv");
+				case FileTypes.Allergens:
+					return Path.Combine(baseDirectory, "Allergens.csv");
+				default:
+					throw new ArgumentOutOfRangeException(nameof(fileType), fileType, null);
+			}
 		}
 	}
 
