@@ -44,13 +44,13 @@ namespace MealsToday.Helpers
 
 			if (dataParts.Length == 6)
 			{
-				user.Roles.Add(mapUserRole(dataParts[5]));
+				user.Roles.Add(mapUserRole(dataParts[5].Trim('"')));
 			}
 			else
 			{
 				for (int i = 5; i < dataParts.Length; i++)
 				{
-					user.Roles.Add(mapUserRole(dataParts[i].Trim(';')));
+					user.Roles.Add(mapUserRole(dataParts[i].Trim(';').Trim('"').Trim()));
 				}
 			}
 
@@ -59,23 +59,27 @@ namespace MealsToday.Helpers
 
 		private static Allergen parseAllergenRow(string row)
 		{
-			Allergen allergen = new Allergen();
-
-			string[] pom = row.Split(';');
-			allergen.AllergenId = Convert.ToInt32(pom[0]);
-			allergen.Name = pom[1];
-			return allergen;
+			var dataParts = row.Split(';');
+			var name = dataParts[1].Trim('"').Trim();
+			var id = Convert.ToInt32(dataParts[0]);
+			return new Allergen(id, name);
 		}
 
 		private static Meal parseMealRow(string row)
 		{
-			Meal meal = new Meal();
+			var dataParts = row.Split(';');
+			var meal = new Meal
+			{
+				MealId = Convert.ToInt32(dataParts[0]),
+				Name = dataParts[1],
+				Description = dataParts[2],
+				Calories = Convert.ToInt16(dataParts[3])
+			};
 
-			string[] pom = row.Split(';');
-			meal.MealId = Convert.ToInt32(pom[0]);
-			meal.Name = pom[1];
-			meal.Description = pom[2];
-			meal.Calories = Convert.ToInt32(pom[3]);
+			foreach (var id in dataParts[4].Trim(',').Split(','))
+			{
+				meal.Allergens.Add(Context.MapOfAllergens[Convert.ToInt32(id)]);
+			}
 
 			return meal;
 		}

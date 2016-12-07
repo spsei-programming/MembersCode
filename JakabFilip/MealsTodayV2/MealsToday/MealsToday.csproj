@@ -46,6 +46,7 @@
   <ItemGroup>
     <Compile Include="Data\Allergen.cs" />
     <Compile Include="Data\Meal.cs" />
+    <Compile Include="Data\Order.cs" />
     <Compile Include="Data\User.cs" />
     <Compile Include="Enums\FileTypes.cs" />
     <Compile Include="Enums\UserRoles.cs" />
@@ -53,6 +54,7 @@
     <Compile Include="Helpers\CSVLoader.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Providers\OrderProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

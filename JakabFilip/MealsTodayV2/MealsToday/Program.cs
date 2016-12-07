@@ -14,6 +14,8 @@ namespace MealsToday
 	{
 		public static void Main(string[] args)
 		{
+			Initialize();
+
 			LogIn();
 
 			Console.WriteLine("Current User: {0}", Context.CurrentUser);
@@ -24,11 +26,16 @@ namespace MealsToday
 			var users = CSVLoader.LoadUserData(CSVLoader.GetCSVPath(FileTypes.Users));
 			Context.AllUsers = users;
 
+			var allergens = CSVLoader.LoadAllergenData(CSVLoader.GetCSVPath(FileTypes.Allergens));
+			Context.Allergens = allergens;
+
 			var meals = CSVLoader.LoadMealData(CSVLoader.GetCSVPath(FileTypes.Meals));
 			Context.Meals = meals;
 
-			var allergens = CSVLoader.LoadAllergenData(CSVLoader.GetCSVPath(FileTypes.Allergens));
-			Context.Allergens = allergens;
+			foreach (KeyValuePair<int, Allergen> mapOfAllergen in Context.MapOfAllergens)
+			{
+				Console.WriteLine($"Allergen with key {mapOfAllergen.Key} is {mapOfAllergen.Value.Name}");
+			}
 		}
 
 		public static void LogIn()
