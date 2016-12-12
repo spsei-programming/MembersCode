@@ -30,6 +30,12 @@ namespace DirStats
 			stopwatch.Stop();
 			Console.WriteLine($"Elapsed time: {stopwatch.Elapsed}");
 
+			stopwatch.Restart();
+			var dict = getByFirstLetter(fileInfo);
+
+			stopwatch.Stop();
+			Console.WriteLine($"Elapsed time: {stopwatch.Elapsed}");
+
 			Console.ReadKey();
 		}
 
@@ -96,20 +102,23 @@ namespace DirStats
 			return fileInfo;
 		}
 
-		private static List<FileInfo> getFilesWithCapital(List<FileInfo> files)
+		private static Dictionary<char, List<FileInfo>> getByFirstLetter(List<FileInfo> files)
 		{
-			Dictionary<char, List<FileInfo>> capitals = new Dictionary<char, List<FileInfo>>(26);
+			Dictionary<char, List<FileInfo>> fileDict = new Dictionary<char, List<FileInfo>>(26);
 
 			for (char i = 'A'; i <= 'Z'; i++)
 			{
-				List<FileInfo> fileChar = new List<FileInfo>(1000);
+				List<FileInfo> fileList = new List<FileInfo>(1000);
 
 				foreach (var fileInfo in files)
 				{
-					if (fileInfo.Name.ToUpper()[0] == i) fileChar.Add(fi);
-					
+					if (fileInfo.Name.ToUpper()[0] == i) fileList.Add(fileInfo);
 				}
+
+				fileDict.Add(i, fileList);
 			}
+
+			return fileDict;
 		}
 	}
 }

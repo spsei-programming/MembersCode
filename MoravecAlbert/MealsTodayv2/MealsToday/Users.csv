@@ -1,0 +1,10 @@
+UserId;Username;First name;Last name;Password;Role
+1;ondra@abc.cz;Ondrej;Valenta;Heslo123;User
+2;petra@abc.cz;Petr;Matuška;Heslo123;User
+3;honza@abc.cz;Jan;Vampír;Heslo123;User
+7;martin@abc.cz;Martin;Kolomazník;Heslo123;User
+8;josef@abc.cz;Josef;Stonohý;Heslo123;User
+9;jana@abc.cz;Jana;Zvelkédálky;Heslo123;"User;MealsAdministrator"
+10;maruska@abc.cz;Marie;Troufalá;Heslo123;"User;MealsAdministrator;OrdersAdministrator"
+13;honza@abc.cz;Jan;Nepomucký;Heslo123;"User;ReportingAdmin"
+16;oliver@abc.cz;Oliver;Odvážný;Heslo123;PowerUser
