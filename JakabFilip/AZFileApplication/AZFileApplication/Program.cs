@@ -16,6 +16,7 @@ namespace AZFileApplication
 			List<string> subDirs = new List<string>(10000);
 			List<string> fileList = new List<string>(50000);
 			List<FileInfo> fileInfoList = new List<FileInfo>(50000);
+			List<int> azFileCount = new List<int>(26);
 			Dictionary<char, List<FileInfo>> azDict = new Dictionary<char, List<FileInfo>>();
 
 			stopWatch.Start();
@@ -42,16 +43,62 @@ namespace AZFileApplication
 			azDict = InitAZDict();
 			SortAZDIct(fileInfoList, azDict);
 			stopWatch.Stop();
-
 			Console.WriteLine($"Time: {stopWatch.Elapsed}");
+
+			stopWatch.Restart();
+			azFileCount = sortFileInfoList(fileInfoList);
+			stopWatch.Stop();
+			Console.WriteLine($"Time: {stopWatch.Elapsed}");
+		}
+
+		private static Dictionary<string, List<FileInfo>> analyzeByExtension(List<FileInfo> files)
+		{
+			Dictionary<string, List<FileInfo>> countsByExt = new Dictionary<string, List<FileInfo>>();
+
+			foreach (var file in files)
+			{
+				if (!countsByExt.ContainsKey(file.Extension))
+					countsByExt.Add(file.Extension, new List<FileInfo>(1000));
+
+				countsByExt[file.Extension].Add(file);
+			}
+		}
+
+		private static List<int> sortFileInfoList(List<FileInfo> filesInfos)
+		{
+			List<int> fileCount = new List<int>(26);
+
+			for (int i = 0; i < 25; i++)
+			{
+				fileCount.Add(0);
+			}
+
+			for (int i = 0; i < 25; i++)
+			{
+				foreach (FileInfo file in filesInfos)
+				{
+					if (file.Name[0] == (char)(i + 'A'))
+					{
+						fileCount[i]++;
+					}
+				}
+			}
+			return fileCount;
 		}
 
 		private static void SortAZDIct(List<FileInfo> allFiles, Dictionary<char, List<FileInfo>> azDict)
 		{
 			foreach (FileInfo file in allFiles)
 			{
-				if (file.Name[0] >= 'A' && file.Name[0] <= 'Z')
-					azDict[file.Name[0]].Add(file);
+				char key = file.Name.ToUpper()[0];
+
+				if (azDict.ContainsKey(key))
+					azDict[key].Add(file);
+				else
+				{
+					azDict.Add(key, new List<FileInfo>(1000));
+					azDict[key].Add(file);
+				}
 			}
 		}
 
