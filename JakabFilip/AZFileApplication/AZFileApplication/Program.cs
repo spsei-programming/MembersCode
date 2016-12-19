@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AZFileApplication.Data;
 
 namespace AZFileApplication
 {
@@ -17,6 +18,7 @@ namespace AZFileApplication
 			List<string> fileList = new List<string>(50000);
 			List<FileInfo> fileInfoList = new List<FileInfo>(50000);
 			List<int> azFileCount = new List<int>(26);
+			List<MyFileInfo> myFiles = new List<MyFileInfo>(10000);
 			Dictionary<char, List<FileInfo>> azDict = new Dictionary<char, List<FileInfo>>();
 
 			stopWatch.Start();
@@ -49,6 +51,131 @@ namespace AZFileApplication
 			azFileCount = sortFileInfoList(fileInfoList);
 			stopWatch.Stop();
 			Console.WriteLine($"Time: {stopWatch.Elapsed}");
+
+			stopWatch.Restart();
+			sumOfAllFilesLinq(fileInfoList, ".exe");
+			stopWatch.Stop();
+			Console.WriteLine("Time: {0}", stopWatch.Elapsed);
+
+			stopWatch.Restart();
+			printAllExeFiles(fileInfoList, ".exe");
+			stopWatch.Stop();
+			Console.WriteLine($"Time: {stopWatch.Elapsed}");
+
+			stopWatch.Restart();
+			myFiles = convertToMyFilesLinq(fileInfoList);
+			stopWatch.Stop();
+			Console.WriteLine($"Time: {stopWatch.Elapsed}");
+
+			stopWatch.Restart();
+			var x = myFiles[0].ToString();
+			Console.WriteLine(x);
+			stopWatch.Stop();
+			Console.WriteLine($"Time: {stopWatch.Elapsed}");
+
+			printAllFilesInDirsStartsWith(fileInfoList, "c");
+		}
+
+		private static void printAllFilesInDirsStartsWith(List<FileInfo> files, string letter)
+		{
+			files
+				.Where(file => file.Directory.Name.StartsWith(letter, StringComparison.InvariantCultureIgnoreCase))
+				.ToList()
+				.ForEach(Console.WriteLine);
+		}
+
+		private static void printAllMyFilesByLenghtLinq(List<MyFileInfo> myFiles)
+		{
+			myFiles
+				.Where(myFile => myFile.Lenght > 3000000)
+				.ToList()
+				.ForEach(Console.WriteLine);
+		}
+
+		private static void printAllExeMyFiles(List<MyFileInfo> files)
+		{
+			printAllMyFiles(files, ".exe");
+		}
+
+		private static void printAllMyFiles(List<MyFileInfo> files, string extension)
+		{
+			files.Select(myFile => myFile.Extension.Equals(extension, StringComparison.InvariantCultureIgnoreCase)).ToList().ForEach(Console.WriteLine);
+		}
+
+		private static List<MyFileInfo> convertToMyFilesLinq(List<FileInfo> files)
+		{
+			return files.Select(file =>
+			{
+				MyFileInfo myFile = new MyFileInfo
+				{
+					Name = file.Name,
+					Created = file.CreationTime,
+					Lenght = file.Length,
+					Extension = file.Extension
+				};
+				return myFile;
+			}).ToList();
+		}
+
+		private static List<MyFileInfo> convertToMyFilesPlain(List<FileInfo> files)
+		{
+			List<MyFileInfo> myFiles = new List<MyFileInfo>(files.Count);
+
+			foreach (FileInfo file in files)
+			{
+				myFiles.Add(new MyFileInfo
+				{
+					Name = file.Name,
+					Created = file.CreationTime,
+					Lenght = file.Length,
+					Extension = file.Extension
+				});
+			}
+
+			return myFiles;
+		}
+
+		private static void printAllExeFiles(List<FileInfo> files, string extension)
+		{
+			printAllFiles(files, extension);
+		}
+
+		private static void printAllFiles(List<FileInfo> files, string extension)
+		{
+			files
+				.Where(x => x.Extension.Equals(extension, StringComparison.InvariantCultureIgnoreCase))
+				.ToList()
+				.ForEach(file =>
+				{
+					Console.WriteLine($"File: {file.Name}, Lenght: {file.Length}");
+				});
+		}
+
+		private static long SumOfAllExeFilesPlain(List<FileInfo> files)
+		{
+			long sum = 0;
+			foreach (FileInfo fileInfo in files)
+			{
+				if (fileInfo.Extension.Equals(".exe", StringComparison.InvariantCultureIgnoreCase))
+					sum += fileInfo.Length;
+			}
+			return sum;
+		}
+
+		private static long sumOfAllExeFilesLinq(List<FileInfo> files)
+		{
+			return sumOfAllFilesLinq(files, ".exe");
+		}
+
+		private static long sumOfAllFilesLinq(List<FileInfo> files, string extension)
+		{
+			//List<FileInfo> fileInfos = files.Where(file => file.Extension.Equals(".exe", StringComparison.InvariantCultureIgnoreCase)).ToList();
+			//var sum = fileInfos.Sum(file => file.Length);
+
+			return files
+				.Where(x => x.Extension.Equals(extension, StringComparison.InvariantCultureIgnoreCase))
+				.ToList()
+				.Sum(x => x.Length);
 		}
 
 		private static Dictionary<string, List<FileInfo>> analyzeByExtension(List<FileInfo> files)
@@ -62,6 +189,8 @@ namespace AZFileApplication
 
 				countsByExt[file.Extension].Add(file);
 			}
+
+			return countsByExt;
 		}
 
 		private static List<int> sortFileInfoList(List<FileInfo> filesInfos)
