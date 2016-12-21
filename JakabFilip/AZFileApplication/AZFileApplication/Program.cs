@@ -76,12 +76,39 @@ namespace AZFileApplication
 			printAllFilesInDirsStartsWith(fileInfoList, "c");
 		}
 
+		private static long TotalSizeofFilesWithAttributes(List<FileInfo> files, FileAttributes atributes)
+		{
+			//long counter = 0;
+			//files
+			//	.Where(x => x.Attributes == FileAttributes.Hidden)
+			//	.ToList()
+			//	.ForEach(y =>
+			//		{
+			//			counter += y.Length;
+			//		});
+			//return counter;
+
+			return files
+				.Where(x => x.Attributes == atributes)
+				.Sum(x => x.Length);
+		}
+
+		private FileInfo FirstFileWithGreaterSize(List<FileInfo> files, long size)
+		{
+			//return files.Find(x => x.Length > size);
+			return files.FirstOrDefault(x => x.Length > size);
+		}
+
 		private static void printAllFilesInDirsStartsWith(List<FileInfo> files, string letter)
 		{
 			files
 				.Where(file => file.Directory.Name.StartsWith(letter, StringComparison.InvariantCultureIgnoreCase))
+				.OrderBy(x => x.Name)
+				.ThenBy(x => x.Length)
+				.Skip(10)
+				.Take(10)
 				.ToList()
-				.ForEach(Console.WriteLine);
+				.ForEach(x => Console.WriteLine($"path: {x.FullName}, length: {x.Length.ToString("### ### ### ###")}"));
 		}
 
 		private static void printAllMyFilesByLenghtLinq(List<MyFileInfo> myFiles)
