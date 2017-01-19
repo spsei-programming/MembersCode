@@ -12,6 +12,8 @@ namespace MealsToday.Data.Classes
 		public string UserNameForOrder { get; set; }
 		public int MealId { get; set; }
 		public SubMenuActions Action { get; set; }
+		public OrderType TypeOfOrder { get; set; }
+		public DateTime Date { get; set; }
 
 		public SubMenuClass()
 		{

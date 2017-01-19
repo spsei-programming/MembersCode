@@ -7,9 +7,17 @@
 		NullAction,
 		BackToMainMenu,
 
-		// show meals />
+		// show meals
 		ShowDetailedMeal,
-		OrderMeal,
-		JobsDone
+		OrderMealToday,
+		JobsDone,
+
+		// orders
+		OrderMealTomorrow,
+
+		// show all orders
+		ShowAllOrders,
+		ShowAllOrdersByDate,
+		ShowAllOrdersByUserName
 	}
 }

@@ -50,18 +50,21 @@ namespace MealsToday.Providers
 		/// <param name="action">Actual submenu layer</param>
 		public static SubMenuClass ReadSubMenuInput(Actions action)
 		{
-			var classToreturn = new SubMenuClass();
+			var classToReturn = new SubMenuClass();
 
 			switch (action)
 			{
 				case Actions.ShowMeals:
 					{
 						Console.Write("Enter Action: ");
-						var args = Console.ReadLine().ToLower().Split(' ');
-
-						switch (args[0])
+						var readLine = Console.ReadLine();
+						if (readLine != null)
 						{
-							case "detail":
+							var args = readLine.ToLower().Split(' ');
+
+							switch (args[0])
+							{
+								case "detail":
 								{
 									int tmpValue;
 									if (!int.TryParse(args[1], out tmpValue))
@@ -70,27 +73,43 @@ namespace MealsToday.Providers
 									}
 									else
 									{
-										classToreturn.MealId = tmpValue;
-										classToreturn.Action = SubMenuActions.ShowDetailedMeal;
+										classToReturn.MealId = tmpValue;
+										classToReturn.Action = SubMenuActions.ShowDetailedMeal;
 									}
 								}
-								break;
-							case "order":
-								throw new NotImplementedException();
-								break;
-							case "help":
+									break;
+								case "order":
+								{
+									int tmpValue;
+									if (!int.TryParse(args[1], out tmpValue))
+									{
+										DisplayAlert("Meal id isnt valid");
+										DisplaySyntaxHelp(action);
+									}
+									classToReturn.Action = SubMenuActions.OrderMealToday;
+									classToReturn.UserNameForOrder = args[2];
+									classToReturn.MealId = tmpValue;
+								}
+									break;
+								case "help":
 								{
 									DisplaySyntaxHelp(action);
 								}
-								break;
-							case "exit":
+									break;
+								case "exit":
 								{
-									classToreturn.Action = SubMenuActions.Exit;
+									classToReturn.Action = SubMenuActions.Exit;
 								}
-								break;
-							default:
-								DisplaySyntaxHelp(action);
-								break;
+									break;
+								case "0":
+								{
+									classToReturn.Action = SubMenuActions.NullAction;
+								}
+									break;
+								default:
+									DisplaySyntaxHelp(action);
+									break;
+							}
 						}
 					}
 					break;
@@ -104,38 +123,118 @@ namespace MealsToday.Providers
 							case "help":
 								{
 									DisplaySyntaxHelp(action);
-									classToreturn.Action = SubMenuActions.NullAction;
+									classToReturn.Action = SubMenuActions.NullAction;
 								}
 								break;
 							case "exit":
 								{
-									classToreturn.Action = SubMenuActions.Exit;
-									return classToreturn;
+									classToReturn.Action = SubMenuActions.Exit;
+									return classToReturn;
 								}
+							case "0":
+								{
+									classToReturn.Action = SubMenuActions.NullAction;
+									return classToReturn;
+								}
+							default:
+								DisplaySyntaxHelp(action);
+								break;
 						}
 
 						int mealId;
 						if (int.TryParse(args[1], out mealId))
 						{
-							Console.WriteLine("Entered argument(meal id) isnt number\nIt must be a nubmer");
+							DisplayAlert("Entered argument(meal id) isnt number");
 							DisplaySyntaxHelp(action);
 						}
 
-						OrdersProvider.OrderMeal(args[0], mealId);
+						classToReturn.UserNameForOrder = args[0];
+						classToReturn.MealId = mealId;
+						classToReturn.TypeOfOrder = OrderType.Today;
 					}
 					break;
 				case Actions.PlaceOrderForTomorrow:
-					throw new NotImplementedException();
+					{
+						Console.Write("Enter args: ");
+						var args = Console.ReadLine().ToLower().Split(' ');
+
+						switch (args[0])
+						{
+							case "help":
+								{
+									DisplaySyntaxHelp(action);
+									classToReturn.Action = SubMenuActions.NullAction;
+								}
+								break;
+							case "exit":
+								{
+									classToReturn.Action = SubMenuActions.Exit;
+									return classToReturn;
+								}
+							case "0":
+								{
+									classToReturn.Action = SubMenuActions.NullAction;
+								}
+								break;
+							default:
+								DisplaySyntaxHelp(action);
+								break;
+						}
+
+						int mealId;
+						if (!int.TryParse(args[1], out mealId))
+						{
+							DisplayAlert("Entered argument(meal id) isnt number");
+							DisplaySyntaxHelp(action);
+						}
+
+						classToReturn.UserNameForOrder = args[0];
+						classToReturn.MealId = mealId;
+						classToReturn.TypeOfOrder = OrderType.Tomorrow;
+					}
 					break;
 				case Actions.ShowAllOrders:
-					throw new NotImplementedException();
+					{
+						Console.Write("Enter Action: ");
+						var args = Console.ReadLine().ToLower().Split(' ');
+						switch (args[0])
+						{
+							case "0":
+								break;
+							case "bydate":
+								{
+									classToReturn.Action = SubMenuActions.ShowAllOrdersByDate;
+									int tmpValueDay, tmpValueMonth;
+									if (!int.TryParse(args[1], out tmpValueDay) && !int.TryParse(args[2], out tmpValueMonth))
+									{
+										DisplayAlert("2rd and 3rd argument must be number (day, month)");
+										classToReturn.Action = SubMenuActions.NullAction;
+										return classToReturn;
+									}
+									if (!int.TryParse(args[2], out tmpValueMonth))
+										classToReturn.Date = new DateTime(DateTime.Today.Year, tmpValueMonth, tmpValueDay);
+								}
+								break;
+							case "byname":
+								classToReturn.Action = SubMenuActions.ShowAllOrdersByUserName;
+								classToReturn.UserNameForOrder = args[1];
+								break;
+							case "exit":
+								classToReturn.Action = SubMenuActions.Exit;
+								break;
+							case "help":
+								DisplaySyntaxHelp(action);
+								break;
+							default:
+								DisplaySyntaxHelp(action);
+								break;
+						}
+					}
 					break;
 				case Actions.ShowStatistics:
 					throw new NotImplementedException();
-					break;
 			}
-			Console.ReadKey(true);
-			return classToreturn;
+			return classToReturn;
 		}
 
 		public static void DisplaySyntaxHelp(Actions action)
@@ -143,27 +242,39 @@ namespace MealsToday.Providers
 			switch (action)
 			{
 				case Actions.ShowMeals:
-					Console.WriteLine("Valid Syntax: [command] [argument]\n" +
+					Console.WriteLine("Valid Syntax: [Command] [Argument]\n" +
 														"Commands: 'detail', 'order', 'help'\n" +
-														"Argument: The Meal's ID");
+														"Argument: The Meal's ID\n" +
+														"Note: in case of ordering, there is another(3rd) [Argument] meaning username");
 					break;
 				case Actions.PlaceOrderForToday:
 					Console.WriteLine("Valid Syntax: [username] [argument]\n" +
-														"Argument: Meal's ID");
+														"Argument: Meal's ID\n" +
+					                  "Note: username cannot be '0' or 'exit'\n" +
+					                  "'0' to back to main menu\n" +
+					                  "'exit' to exit the program");
 					break;
 				case Actions.PlaceOrderForTomorrow:
 					Console.WriteLine("Valid Syntax: [username] [argument]\n" +
-														"Argument: Meal's ID");
+														"Argument: Meal's ID\n" +
+														"Note: username cannot be '0' or 'exit'\n" +
+														"'0' to back to main menu\n" +
+														"'exit' to exit the program");
 					break;
 				case Actions.ShowAllOrders:
 					Console.WriteLine("Valid Syntax: [command]\n" +
-														"Commands: '0', 'exit'");
+														"Commands: 'byDate', byName'', '0', 'exit'\n" +
+														"Note: In case of byDate or byName u must enter argument\n" +
+														"Argument: \n" +
+														" for byDate: 'month' 'day'\n" +
+														" for byName: name");
 					break;
 				case Actions.ShowStatistics:
 					Console.WriteLine("Valid Syntax: [command]\n" +
 														"Commands: '0', 'exit'");
 					break;
 			}
+			Console.ReadKey(true);
 		}
 
 		public static void DisplayMainMenu()
@@ -184,26 +295,35 @@ namespace MealsToday.Providers
 				case Actions.ShowMeals:
 					ShowMeals(MealsProvider.GetDefaultMeals());
 					break;
-				case Actions.PlaceOrderForToday:
-					break;
-				case Actions.PlaceOrderForTomorrow:
-					break;
 				case Actions.ShowAllOrders:
-					ShowAllOrders();
+					ShowAllOrders(OrderType.Today);
 					break;
 				case Actions.ShowStatistics:
 					break;
 			}
 		}
 
-		public static void DisplaySubeMenuAction(SubMenuClass subMenu)
+		public static void ExecuteSubMenuAction(SubMenuClass subMenu)
 		{
 			switch (subMenu.Action)
 			{
 				case SubMenuActions.ShowDetailedMeal:
 					ShowDetailedMeal(subMenu.MealId);
 					break;
-				case SubMenuActions.OrderMeal:
+				case SubMenuActions.OrderMealToday:
+					OrdersProvider.OrderMeal(subMenu);
+					break;
+				case SubMenuActions.OrderMealTomorrow:
+					OrdersProvider.OrderMeal(subMenu);
+					break;
+				case SubMenuActions.ShowAllOrders:
+					ShowAllOrders(subMenu.TypeOfOrder);
+					break;
+				case SubMenuActions.ShowAllOrdersByDate:
+					ShowOrdersByDate(subMenu);
+					break;
+				case SubMenuActions.ShowAllOrdersByUserName:
+					ShowOrdersByUsername(subMenu);
 					break;
 			}
 		}
@@ -223,9 +343,7 @@ namespace MealsToday.Providers
 		{
 			if (mealId < 0)
 			{
-				Console.WriteLine("Error has Occured. meal ID is not valid.\n" +
-													"Press any key to continue");
-				Console.ReadKey(true);
+				DisplayAlert("Error has Occured. meal ID is not valid");
 				return;
 			}
 
@@ -241,13 +359,12 @@ namespace MealsToday.Providers
 			}
 			catch (DirectoryNotFoundException e)
 			{
-				Console.WriteLine("Directory not found. \n {0}", e.Message);
+				DisplayAlert(e.Message);
 			}
 
 			if (meal == null)
 			{
-				Console.WriteLine("Meal not found.");
-				Console.ReadKey(true);
+				DisplayAlert("Meal not found.");
 				return;
 			}
 
@@ -264,49 +381,85 @@ namespace MealsToday.Providers
 			Console.ReadKey(true);
 		}
 
-		public static void ShowAllOrders()
+		public static void ShowOrdersByUsername(SubMenuClass subMenu)
 		{
-			var xmlSerializer = new XmlSerializer(typeof(MealOrder));
-
-			List<MealOrder> orderedMeals;
-			List<MealOrder> orderedMealsTomorrow;
-
-			using (Stream stream = File.OpenRead(@"Lists\OrdersList.xml"))
+			Console.WriteLine("All orders of user: {0}", subMenu.UserNameForOrder);
+			foreach (var mealOrder in OrdersProvider.GetOrdersByUserName(subMenu.UserNameForOrder))
 			{
-				orderedMeals = xmlSerializer.Deserialize(stream) as List<MealOrder>;
+				Console.WriteLine($"ID: {mealOrder.Id}\tMeal Name: {mealOrder.Name}");
+
+				Console.WriteLine("Press any key to continue");
+				Console.ReadKey(true);
 			}
-			using (Stream stream = File.OpenRead(@"Lists\TomorrowOrdersList.xml"))
-			{
-				orderedMealsTomorrow = xmlSerializer.Deserialize(stream) as List<MealOrder>;
-			}
+		}
 
-			if (orderedMeals == null)
+		public static void ShowOrdersByDate(SubMenuClass subMenu)
+		{
+			var ordersList = OrdersProvider.GetOrdersByDate(subMenu.Date);
+			Console.WriteLine($"Orders found by date: {subMenu.Date.Day}.{subMenu.Date.Month}.{subMenu.Date.Year}");
+			foreach (var mealOrder in ordersList)
 			{
-				Console.WriteLine("There are no ordered Meals");
-				return;
-			}
-
-			if (orderedMealsTomorrow == null)
-			{
-				Console.WriteLine("There are no ordered Meals for Tomorrow");
+				Console.WriteLine($"Meal ID: {mealOrder.Id}\tMeal: {mealOrder.Name}\tUserName: {mealOrder.UserName}");
 			}
 
-			Console.ForegroundColor = ConsoleColor.Blue;
+			Console.WriteLine("Press any key to continue");
+			Console.ReadKey(true);
+		}
 
-			Console.WriteLine("Already ordered meals:");
-			var sortedListToday = orderedMeals.OrderBy(x => x.Date);
-			foreach (var meal in sortedListToday)
+		public static void ShowAllOrders(OrderType type)
+		{
+			switch (type)
 			{
-				Console.WriteLine($"username: {meal.Name}\tmeal ID: {meal.Id}");
-			}
-			Console.ForegroundColor = ConsoleColor.White;
+				case OrderType.Today:
+					{
+						var orderedMeals = OrdersProvider.GetAllOrders(OrderType.Today);
 
-			Console.WriteLine("Meals ordered for tomorrow:");
-			var sortedListTomorrow = orderedMealsTomorrow.OrderBy(x => x.Date);
-			foreach (var meal in sortedListTomorrow)
-			{
-				Console.WriteLine($"Username: {meal.UserName}\tmeal ID: {meal.Id}");
+						if (orderedMeals == null)
+						{
+							DisplayAlert("There are no ordered Meals for Today");
+							Console.ReadKey(true);
+							return;
+						}
+						Console.ForegroundColor = ConsoleColor.Blue;
+
+						Console.WriteLine("Already ordered meals:");
+						var sortedListToday = orderedMeals.OrderBy(x => x.Date);
+						foreach (var order in sortedListToday)
+						{
+							Console.WriteLine($"username: {order.UserName}\tmeal ID: {order.Id}\tdate: {order.Date.Day}.{order.Date.Month}.{order.Date.Year}");
+						}
+					}
+					break;
+				case OrderType.Tomorrow:
+					{
+						var orderedMealsTomorrow = OrdersProvider.GetAllOrders(OrderType.Tomorrow);
+
+						if (orderedMealsTomorrow == null)
+						{
+							DisplayAlert("There are no ordered Meals for Tomorrow");
+							return;
+						}
+
+						Console.ForegroundColor = ConsoleColor.White;
+
+						Console.WriteLine("Meals ordered for tomorrow:");
+						var sortedListTomorrow = orderedMealsTomorrow.OrderBy(x => x.Date);
+						foreach (var meal in sortedListTomorrow)
+						{
+							Console.WriteLine($"Username: {meal.UserName}\tmeal ID: {meal.Id}");
+						}
+					}
+					break;
 			}
+
+			Console.ResetColor();
+		}
+
+		public static void DisplayAlert(string msg)
+		{
+			Console.ForegroundColor = ConsoleColor.Red;
+			Console.WriteLine(msg + "\nPress any key to continue");
+			Console.ReadKey(true);
 			Console.ResetColor();
 		}
 	}

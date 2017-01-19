@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="Classes\SubMenuClass.cs" />
     <Compile Include="Enums\Actions.cs" />
+    <Compile Include="Enums\OrderType.cs" />
     <Compile Include="Enums\SubMenuActions.cs" />
     <Compile Include="Meal.cs" />
     <Compile Include="MealOrder.cs" />

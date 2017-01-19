@@ -46,8 +46,10 @@ namespace MealsToday
 				var subMenuInput = UIProvider.ReadSubMenuInput(mainInput);
 
 				if (subMenuInput.Action == SubMenuActions.Exit) break;
+				if (subMenuInput.Action == SubMenuActions.NullAction)
+					continue;
 
-				UIProvider.DisplaySubeMenuAction(subMenuInput);
+				UIProvider.ExecuteSubMenuAction(subMenuInput);
 			} while (true);
 
 			Console.WriteLine("See ya next time\n" +
