@@ -11,43 +11,40 @@
 <div class="row">
 	<div class="col-md-4">
 		<h2>Order your meal</h2>
-		<p>
-			<form>
-				<div class="form-group">
-					<label for="">First Name</label>
-					<input class="form-control" type="text" name="firstName" />
-				</div>
-				<div class="form-group">
-					<label for="">Last Name</label>
-					<input class="form-control" type="text" name="lastName" />
-				</div>
-				<div class="form-group">
-					<label for="">Meal</label>
-					<select name="meal" class="form-control"></select>
-				</div>
-				<div class="radio">
-					<label>
-						<input type="radio" name="userType" value="extern"> Student
-					</label>
-					<label>
-						<input type="radio" name="userType" value="extern"> Teacher
-					</label>
-					<label>
-						<input type="radio" name="userType" value="extern"> Externist
-					</label>
-				</div>
-				<div class="form-group">
-					<label for="">Date</label>
-					<input class="form-control" type="text" name="date" />
-				</div>
-				<button type="submit" class="btn btn-default">Submit</button>
-			</form>
-		</p>
+		<form>
+			<div class="form-group">
+				<label for="meal">Meal</label>
+				<select name="meal" class="form-control" id="meal">
+					<option value="svickova">Svíčková s knedlíkem</option>
+					<option value="zelny-salat">Zelný salát</option>
+				</select>
+			</div>
+			<div class="form-group">
+				<label for="date">Date</label>
+				<input class="form-control" type="text" name="date" id="date">
+			</div>
+			<button type="submit" class="btn btn-default">Submit</button>
+		</form>
 	</div>
 	<div class="col-md-8">
-		<h2>Orders</h2>
-		<p>
-
-		</p>
+		<h2>Your Orders</h2>
+		<table class="table">
+			<thead>
+			<tr>
+				<td>Date</td>
+				<td>Meal name</td>
+				<td>Person Name</td>
+				<td>Order time</td>
+			</tr>
+			</thead>
+			<tbody>
+			<tr>
+				<td>27.01.2017</td>
+				<td>Svíčková s knedlíkem</td>
+				<td>Moravec, Albert</td>
+				<td>24.01.2017 14:28:01</td>
+			</tr>
+			</tbody>
+		</table>
 	</div>
 </div>
