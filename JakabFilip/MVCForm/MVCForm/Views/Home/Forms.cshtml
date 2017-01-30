@@ -1,0 +1,173 @@
+﻿@using MVCForm.Models
+@{
+	Layout = "~/Views/Shared/_Layout.cshtml";
+	var user = Session["CurrentUser"] == null ? "There is no user set" : ((AccountModel)Session["CurrentUser"]).Email;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+	<meta name="viewport" content="width=device-width" />
+	<title>Forms</title>
+</head>
+<body>
+	<div class="row" style="margin-bottom: 2%;">
+		<div class="col-md-2">
+			<button style="margin: 5% 0 2% 0;" type="button" data-toggle="collapse" data-target="#registration" class="btn btn-info">
+				Registration ⟫
+			</button>
+		</div>
+		<div class="col-md-2">
+			<button style="margin: 5% 0 2% 0;" type="button" data-toggle="collapse" data-target="#login" class="btn btn-info">
+				Log in ⟫
+			</button>
+		</div>
+		<div class="col-md-2">
+			<button style="margin: 5% 0 2% 0;" type="button" data-toggle="collapse" data-target="#meal-order" class="btn btn-info">
+				Meal Order Form ⟫
+			</button>
+		</div>
+		<div class="col-md-2">
+			<button style="margin: 5% 0 2% 0;" type="button" data-toggle="collapse" data-target="#create-meal" class="btn btn-info">
+				Create Meal Form ⟫
+			</button>
+		</div>
+	</div>
+
+	<!--MEAL ORDER-->
+	<div id="meal-order" class="row collapse" style="margin-bottom: 2%;">
+		<div class="col-md-4 col-md-offset-4">
+			<form id="meal-order-form" action="/Home/SaveOrder" method="get">
+				<fieldset>
+					<legend>Order Meal</legend>
+					<label>Current User: @user</label>
+					<div class="form-group">
+						<label for="meal-id">Choose Meal</label>
+						<select class="form-control" id="meal-id" name="meal" required>
+							<option value="1">Meal 01</option>
+							<option value="2">Meal 02</option>
+							<option value="3">Meal 03</option>
+							<optgroup label="Vegan Food">
+								<option value="4">Vegan Meal 04</option>
+								<option value="5">Vegan Meal 05</option>
+								<option value="6">Vegan Meal 06</option>
+							</optgroup>
+						</select>
+					</div>
+					<div class="form-group">
+						<input type="date" class="glyphicon-calendar form-control" name="dateTo" placeholder="" required />
+					</div>
+
+					@{
+						if ((AccountModel)Session["CurrentUser"] != null)
+						{
+							<input type="submit" class="btn btn-info" value="Submit" />
+						}
+						else
+						{
+							<input style="cursor: not-allowed" type="submit" class="btn btn-danger" value="You must First Login" disabled />
+						}
+					}
+				</fieldset>
+			</form>
+		</div>
+	</div>
+
+	<!--REGISTRATION-->
+	<div id="registration" class="row collapse" style="margin-bottom: 2%;">
+		<div class="col-md-4 col-md-offset-4">
+			<form id="registration-form" action="/Home/Register" method="get">
+				<fieldset>
+					<legend>Registration</legend>
+					<div class="form-group">
+						<input type="email" class="form-control" name="email" placeholder="E-mail Adress" required="required" />
+					</div>
+					<div class="form-group">
+						<input type="password" class="form-control" name="password" placeholder="Password" required="required" />
+					</div>
+					<div class="form-group">
+						<div class="radio-inline">
+							<input type="radio" class="radio-inline" id="student" name="userType" value="student" required />
+							<label for="student">Student</label>
+						</div>
+						<div class="radio-inline">
+							<input type="radio" class="radio-inline" id="personal" name="userType" value="teacher" required />
+							<label for="personal">Teacher</label>
+						</div>
+						<div class="radio-inline">
+							<input type="radio" class="radio-inline" id="externist" name="userType" value="externist" required />
+							<label for="externist">Externist</label>
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="birthday">Birthday Date</label>
+						<input type="date" class="form-control glyphicon-calendar" id="birthday" name="birthday" required>
+					</div>
+					<input type="submit" class="btn btn-info" value="Submit" />
+				</fieldset>
+			</form>
+		</div>
+	</div>
+
+	<!--LOGIN-->
+	<div id="login" class="row collapse" style="margin-bottom: 2%;">
+		<div class="col-md-4 col-md-offset-4">
+			<form id="login-form" action="/Home/Login" method="get">
+				<fieldset>
+					<legend>Login</legend>
+					<div class="form-group">
+						<label for="email">E-mail</label>
+						<input type="email" class="form-control" id="email" name="email" placeholder="E-mail" required />
+					</div>
+					<div class="form-group">
+						<label for="password">Password</label>
+						<input type="password" class="form-control" id="password" name="password" placeholder="Password" required />
+					</div>
+					<input type="submit" class="btn btn-info" value="Log in" />
+				</fieldset>
+			</form>
+		</div>
+	</div>
+
+	<!--MEAL CREATE-->
+	<div id="create-meal" class="row collapse" style="margin-bottom: 2%">
+		<div class="col-md-4 col-md-offset-4">
+			<form id="create-meal-form" action="/Home/CreateMeal" method="get">
+				<fieldset>
+					<legend>Create Meal</legend>
+					<div class="form-group">
+						<label for="meal-name">Name of the Meal</label>
+						<input type="text" class="form-control" id="meal-name" name="mealName" placeholder="Name of the Meal" required />
+					</div>
+					<div class="form-group">
+						<label for="calories">Calories</label>
+						<input type="number" class="form-control" id="calories" name="calories" placeholder="Amount of Calories" required />
+					</div>
+					<div class="form-group">
+						<label>Allergens (To choose multiple options, hold ctrl or shift)</label>
+						<select class="form-control" name="allergens" multiple="multiple" size="4">
+							<option value="allergen1">
+								Allergen 1
+							</option>
+							<option value="allergen2">
+								Allergen 2
+							</option>
+							<option value="allergen3">
+								Allergen 3
+							</option>
+							<option value="allergen4">
+								Allergen 4
+							</option>
+							<option value="allergen5">
+								Allergen 5
+							</option>
+						</select>
+						<input style="margin-top: 3%;" type="submit" class="btn btn-info" value="Create Meal" />
+					</div>
+				</fieldset>
+			</form>
+		</div>
+	</div>
+</body>
+</html>

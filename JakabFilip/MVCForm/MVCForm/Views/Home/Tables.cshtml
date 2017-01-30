@@ -1,0 +1,112 @@
+﻿@using MVCForm.Models
+@using MVCForm.Models.Enums
+@{
+	ViewBag.Title = "MealOrders";
+}
+
+<div class="row">
+	<div class="col-md-2">
+		<button style="margin-top: 3%;" type="button" class="btn btn-info" data-toggle="collapse" data-target="#orders-table">
+			Meal Orders ⟫
+		</button>
+	</div>
+	<div class="col-md-2">
+		<button style="margin-top: 3%;" type="button" class="btn btn-info" data-toggle="collapse" data-target="#meals-table">
+			Meals ⟫
+		</button>
+	</div>
+</div>
+
+<div class="row collapse" id="orders-table">
+	<div class="col-md-6 col-md-offset-2">
+		<table class="table table-hover">
+			<thead>
+				<tr>
+					<th>
+						User
+					</th>
+					<th>
+						Meal
+					</th>
+					<th>
+						Date of Order
+					</th>
+					<th>
+						Date to be Ordered
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+
+				@foreach (OrderModel order in (List<OrderModel>)Session["Orders"] ?? new List<OrderModel>())
+				{
+					<tr>
+						<td>
+							@order.Client
+						</td>
+						<td>
+							@order.MealId
+						</td>
+						<td>
+							@order.DateFrom.ToString("dd.MM.yyyy")
+						</td>
+						<td>
+							@order.DateTo.ToString("dd.MM.yyyy")
+						</td>
+					</tr>
+			}
+			</tbody>
+		</table>
+	</div>
+</div>
+
+<div id="meals-table" class="row collapse">
+	<div class="col-md-6 col-md-offset-2">
+		<table class="table table-hover">
+			<thead>
+				<tr>
+					<th>
+						Meal Name
+					</th>
+					<th>
+						Meal Id
+					</th>
+					<th>
+						Calories
+					</th>
+					<th>
+						Allergens
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+
+				@foreach (MealModel meal in (List<MealModel>)Session["Meals"] ?? new List<MealModel>())
+				{
+					<tr>
+						<td>
+							@meal.Name
+						</td>
+						<td>
+							@meal.Id
+						</td>
+						<td>
+							@meal.Calories
+						</td>
+						<td>
+							<ul>
+								@foreach (Allergens allergen in meal.Allergens)
+								{
+									<li>
+										@allergen.ToString()
+									</li>
+								}
+							</ul>
+						</td>
+					</tr>
+			}
+
+			</tbody>
+		</table>
+	</div>
+</div>
