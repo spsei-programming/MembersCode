@@ -14,6 +14,7 @@ namespace AZFileApplication
 		public static void Main(string[] args)
 		{
 			var stopWatch = new Stopwatch();
+			string rootFolder = @"C:\Program Files";
 			List<string> subDirs = new List<string>(10000);
 			List<string> fileList = new List<string>(50000);
 			List<FileInfo> fileInfoList = new List<FileInfo>(50000);
@@ -23,7 +24,7 @@ namespace AZFileApplication
 
 			stopWatch.Start();
 			// getting The list of Sub directories ...
-			GetAllSubDirs(@"C:\Program Files", subDirs);
+			GetAllSubDirs(rootFolder, subDirs);
 			stopWatch.Stop();
 			Console.WriteLine($"Time: {stopWatch.Elapsed}");
 
@@ -33,61 +34,111 @@ namespace AZFileApplication
 			stopWatch.Stop();
 			Console.WriteLine($"Time: {stopWatch.Elapsed}");
 
-			Console.WriteLine($"Folders: {subDirs.Count}");
-			Console.WriteLine($"Files: {fileList.Count}");
+			//Console.WriteLine($"Folders: {subDirs.Count}");
+			//Console.WriteLine($"Files: {fileList.Count}");
 
 			stopWatch.Restart();
 			GetFileInfos(fileList, fileInfoList);
 			stopWatch.Stop();
 			Console.WriteLine($"Time: {stopWatch.Elapsed}");
 
-			stopWatch.Restart();
-			azDict = InitAZDict();
-			SortAZDIct(fileInfoList, azDict);
-			stopWatch.Stop();
-			Console.WriteLine($"Time: {stopWatch.Elapsed}");
+			//stopWatch.Restart();
+			//azDict = InitAZDict();
+			//SortAZDIct(fileInfoList, azDict);
+			//stopWatch.Stop();
+			//Console.WriteLine($"Time: {stopWatch.Elapsed}");
+
+			//stopWatch.Restart();
+			//azFileCount = sortFileInfoList(fileInfoList);
+			//stopWatch.Stop();
+			//Console.WriteLine($"Time: {stopWatch.Elapsed}");
+
+			//stopWatch.Restart();
+			//sumOfAllFilesLinq(fileInfoList, ".exe");
+			//stopWatch.Stop();
+			//Console.WriteLine("Time: {0}", stopWatch.Elapsed);
+
+			//stopWatch.Restart();
+			//printAllExeFiles(fileInfoList, ".exe");
+			//stopWatch.Stop();
+			//Console.WriteLine($"Time: {stopWatch.Elapsed}");
+
+			//stopWatch.Restart();
+			//myFiles = convertToMyFilesLinq(fileInfoList);
+			//stopWatch.Stop();
+			//Console.WriteLine($"Time: {stopWatch.Elapsed}");
+
+			//stopWatch.Restart();
+			//var x = myFiles[0].ToString();
+			//Console.WriteLine(x);
+			//stopWatch.Stop();
+			//Console.WriteLine($"Time: {stopWatch.Elapsed}");
+
+			//stopWatch.Restart();
+			//printAllFilesInDirsStartsWith(fileInfoList, "c");
+			//stopWatch.Stop();
+			//Console.WriteLine("Time: {0}", stopWatch.Elapsed);
 
 			stopWatch.Restart();
-			azFileCount = sortFileInfoList(fileInfoList);
-			stopWatch.Stop();
-			Console.WriteLine($"Time: {stopWatch.Elapsed}");
-
-			stopWatch.Restart();
-			sumOfAllFilesLinq(fileInfoList, ".exe");
+			PrintSortedFolders(GetFirstAndLastFolders(Directory.GetDirectories(rootFolder).ToList()), fileInfoList);
 			stopWatch.Stop();
 			Console.WriteLine("Time: {0}", stopWatch.Elapsed);
+		}
 
-			stopWatch.Restart();
-			printAllExeFiles(fileInfoList, ".exe");
-			stopWatch.Stop();
-			Console.WriteLine($"Time: {stopWatch.Elapsed}");
+		private static void PrintSortedFolders(List<string> unsortedFolders, List<FileInfo> files)
+		{
+			// Getting sorted list of Folders
+			var sortedList = SortFolders(unsortedFolders, files);
 
-			stopWatch.Restart();
-			myFiles = convertToMyFilesLinq(fileInfoList);
-			stopWatch.Stop();
-			Console.WriteLine($"Time: {stopWatch.Elapsed}");
+			// Printing Folders
+			Console.WriteLine("First 3 and last 3 folders sorted by Total size of all files inside each other ...");
+			foreach (string folder in sortedList)
+			{
+				Console.WriteLine($"Total size of file: {GetSizeOfInternalFiles(folder, files)}");
+			}
+		}
 
-			stopWatch.Restart();
-			var x = myFiles[0].ToString();
-			Console.WriteLine(x);
-			stopWatch.Stop();
-			Console.WriteLine($"Time: {stopWatch.Elapsed}");
+		private static List<string> SortFolders(List<string> folders, List<FileInfo> files)
+		{
+			Dictionary<string, long> tmpDictionary = new Dictionary<string, long>();
+			foreach (string folder in folders)
+			{
+				tmpDictionary.Add(folder, GetSizeOfInternalFiles(folder, files));
+			}
 
-			printAllFilesInDirsStartsWith(fileInfoList, "c");
+			List<long> sizeListToSort = tmpDictionary.Values.ToList();
+			List<string> sortedFolders = new List<string>();
+			sizeListToSort.Sort();
+			foreach (long value in sizeListToSort)
+			{
+				sortedFolders.Add(tmpDictionary.First(x => x.Value == value).Key);
+				tmpDictionary.Remove(tmpDictionary.First(x => x.Value == value).Key);
+			}
+
+			return sortedFolders;
+		}
+
+		private static long GetSizeOfInternalFiles(string folder, List<FileInfo> files)
+		{
+			return files
+				.Where(file => file.FullName.StartsWith(folder))
+				.Sum(x => x.Length);
+		}
+
+		private static List<string> GetFirstAndLastFolders(List<string> folders)
+		{
+			List<string> tmpList = folders.Take(3).ToList();
+			tmpList.AddRange(folders.Skip(folders.Count - 3).Take(3).ToList());
+			return tmpList;
+		}
+
+		private static List<string> GetSubDirs(string folder)
+		{
+			return Directory.GetDirectories(folder).ToList();
 		}
 
 		private static long TotalSizeofFilesWithAttributes(List<FileInfo> files, FileAttributes atributes)
 		{
-			//long counter = 0;
-			//files
-			//	.Where(x => x.Attributes == FileAttributes.Hidden)
-			//	.ToList()
-			//	.ForEach(y =>
-			//		{
-			//			counter += y.Length;
-			//		});
-			//return counter;
-
 			return files
 				.Where(x => x.Attributes == atributes)
 				.Sum(x => x.Length);
@@ -95,14 +146,13 @@ namespace AZFileApplication
 
 		private FileInfo FirstFileWithGreaterSize(List<FileInfo> files, long size)
 		{
-			//return files.Find(x => x.Length > size);
 			return files.FirstOrDefault(x => x.Length > size);
 		}
 
-		private static void printAllFilesInDirsStartsWith(List<FileInfo> files, string letter)
+		private static void printAllFilesInDirsStartsWith(List<FileInfo> files, string word)
 		{
 			files
-				.Where(file => file.Directory.Name.StartsWith(letter, StringComparison.InvariantCultureIgnoreCase))
+				.Where(file => file.Directory.Name.StartsWith(word, StringComparison.InvariantCultureIgnoreCase))
 				.OrderBy(x => x.Name)
 				.ThenBy(x => x.Length)
 				.Skip(10)
@@ -126,7 +176,10 @@ namespace AZFileApplication
 
 		private static void printAllMyFiles(List<MyFileInfo> files, string extension)
 		{
-			files.Select(myFile => myFile.Extension.Equals(extension, StringComparison.InvariantCultureIgnoreCase)).ToList().ForEach(Console.WriteLine);
+			files
+				.Where(myFile => myFile.Extension.Equals(extension, StringComparison.InvariantCultureIgnoreCase))
+				.ToList()
+				.ForEach(Console.WriteLine);
 		}
 
 		private static List<MyFileInfo> convertToMyFilesLinq(List<FileInfo> files)
@@ -196,9 +249,6 @@ namespace AZFileApplication
 
 		private static long sumOfAllFilesLinq(List<FileInfo> files, string extension)
 		{
-			//List<FileInfo> fileInfos = files.Where(file => file.Extension.Equals(".exe", StringComparison.InvariantCultureIgnoreCase)).ToList();
-			//var sum = fileInfos.Sum(file => file.Length);
-
 			return files
 				.Where(x => x.Extension.Equals(extension, StringComparison.InvariantCultureIgnoreCase))
 				.ToList()
@@ -282,8 +332,7 @@ namespace AZFileApplication
 			{
 				try
 				{
-					var files = Directory.GetFiles(subDir);
-					filesList.AddRange(files);
+					filesList.AddRange(Directory.GetFiles(subDir));
 				}
 				catch (Exception)
 				{
@@ -306,8 +355,9 @@ namespace AZFileApplication
 					GetAllSubDirs(dir, subDirs);
 				}
 			}
-			catch (Exception)
+			catch (Exception e)
 			{
+				Console.WriteLine($"Folder Name: {e.Message}");
 				Console.WriteLine("Unauthorized access");
 			}
 		}
