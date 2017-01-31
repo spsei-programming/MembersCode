@@ -1,0 +1,72 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+<div class="row">
+    <h1>Meals today</h1>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <h2>Order your meal</h2>
+        <p>
+            <form>
+                <div class="form-group">
+                    <label for="firstName">Jméno</label>
+                    <input type="text" class="form-control" id="firstName" placeholder="Vaše křestní jméno">
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputPassword1">Přijmení</label>
+                    <input type="text" class="form-control" id="lastName" placeholder="Vaše přijmení">
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputFile">Jídlo</label>
+                    <select id="exampleInputFile" class="form-control">
+                        <optgroup title="Vegetariánské" label="Vegetariánské">
+                            <option title="Zeleninový salát" value="1">Zeleninový salát</option>
+                            <option title="Kuskus s jogurtem" value="2">Kuskus s jogurtem</option>
+                            <option title="Jogurt samotný" value="3">Jogurt samotný</option>
+                        </optgroup>
+                        <optgroup title="Masové" label="Masové">
+                            <option title="Svíčková na smetaně" value="4">Svíčková na smetaně</option>
+                            <option title="Penne pollo gorgonzola" value="5">Penne pollo gorgonzola</option>
+                            <option title="Vídeňský řízek" value="6">Vídeňský řízek</option>
+
+                        </optgroup>
+                        @*<optgroup title="Svačiny" label="Svačiny"></optgroup>*@
+
+                    </select>
+                </div>
+                <label>Jsem </label>
+                <div class="radio-inline">
+                    <label>
+                        <input type="radio" name="userType" id="userTypeStudent" value="student" checked>
+                        Student
+                    </label>
+                </div>
+                <div class="radio-inline">
+                    <label>
+                        <input type="radio" name="userType" id="userTypeTeacher" value="teacher" >
+                        Učitel
+                    </label>
+                </div>
+                <div class="radio-inline">
+                    <label>
+                        <input type="radio" name="userType" id="userTypeExternal" value="teacher">
+                        Externista
+                    </label>
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputFile">Datum</label>
+                    <input id="orderDate" type="text" allowautocomplet="no"/>
+                </div>
+                <button type="submit" class="btn btn-default">Objednat</button>
+            </form>
+        </p>
+        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
+    </div>
+    <div class="col-md-8">
+        <h2>Orders</h2>
+        <p></p>
+    </div>
+</div>

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -31,7 +32,7 @@ namespace DirStats
 			Console.WriteLine($"Elapsed time: {stopwatch.Elapsed}");
 
 			stopwatch.Restart();
-			var dict = getByFirstLetter(fileInfo);
+			var dict = getArray(fileInfo);
 
 			stopwatch.Stop();
 			Console.WriteLine($"Elapsed time: {stopwatch.Elapsed}");
@@ -102,11 +103,11 @@ namespace DirStats
 			return fileInfo;
 		}
 
-		private static Dictionary<char, List<FileInfo>> getByFirstLetter(List<FileInfo> files)
+		private static Dictionary<char, int> getByFirstLetter(List<FileInfo> files)
 		{
-			Dictionary<char, List<FileInfo>> fileDict = new Dictionary<char, List<FileInfo>>(26);
+			Dictionary<char, int> fileDict = new Dictionary<char, int>(26);
 
-			for (char i = 'A'; i <= 'Z'; i++)
+			/*for (char i = 'A'; i <= 'Z'; i++)
 			{
 				List<FileInfo> fileList = new List<FileInfo>(1000);
 
@@ -116,9 +117,41 @@ namespace DirStats
 				}
 
 				fileDict.Add(i, fileList);
+			}*/
+
+			for (char i = 'A'; i <= 'Z'; i++)
+			{
+				fileDict.Add(i, 0);
+			}
+
+			foreach (var fileInfo in files)
+			{
+				var firstChar = fileInfo.Name.ToUpper()[0];
+
+				if (firstChar >= 'A' && firstChar <= 'Z')
+				{
+					fileDict[firstChar]++;
+				}
 			}
 
 			return fileDict;
+		}
+
+		private static int[] getArray(List<FileInfo> files)
+		{
+			int[] chararr = new int[26];
+			
+			foreach (var file in files)
+			{
+				var firstChar = file.Name.ToUpper()[0];
+
+				if (firstChar >= 'A' && firstChar <= 'Z')
+				{
+					chararr[firstChar-65]++;
+				}
+			}
+
+			return chararr;
 		}
 	}
 }
