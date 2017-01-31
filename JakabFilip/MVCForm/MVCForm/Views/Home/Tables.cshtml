@@ -94,14 +94,18 @@
 							@meal.Calories
 						</td>
 						<td>
-							<ul>
-								@foreach (Allergens allergen in meal.Allergens)
-								{
-									<li>
-										@allergen.ToString()
-									</li>
-								}
-							</ul>
+							<div class="dropdown">
+								<button id="@meal.Id" type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">
+									Allergens
+									<span class="caret"></span>
+								</button>
+								<ul class="dropdown-menu" aria-labelledby="@meal.Id">
+									@foreach (Allergens alergen in meal.Allergens)
+									{
+										<li style="padding-left: 4%;">@alergen.ToString()</li>
+									}
+								</ul>
+							</div>
 						</td>
 					</tr>
 			}

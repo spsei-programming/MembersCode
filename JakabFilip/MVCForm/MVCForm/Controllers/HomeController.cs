@@ -72,7 +72,13 @@ namespace MVCForm.Controllers
 
 		public ActionResult Index()
 		{
-			//var session = Session;
+			Accounts.Add(new AccountModel
+			{
+				Birthday = new DateTime(),
+				Email = "admin@admin.ad",
+				Password = "admin",
+				UserType = UserTypes.Externist
+			});
 
 			return View();
 		}
@@ -102,13 +108,14 @@ namespace MVCForm.Controllers
 		}
 
 		[HttpGet]
-		public ActionResult CreateMeal(string mealName, int calories, string[] allergens)
+		public ActionResult CreateMeal(string mealName, int calories, MealType mealType, string[] allergens)
 		{
 			var meal = new MealModel
 			{
 				Name = mealName,
 				Calories = calories,
-				Id = Meals.Count
+				Id = Meals.Count,
+				Type = mealType
 			};
 			foreach (string allergen in allergens)
 			{
@@ -138,7 +145,7 @@ namespace MVCForm.Controllers
 		}
 
 		[HttpGet]
-		public ActionResult SaveOrder(string meal, DateTime dateTo)
+		public ActionResult SaveOrder(int meal, DateTime dateTo)
 		{
 			var order = CreateOrderModel(meal, DateTime.Now, dateTo);
 
@@ -195,12 +202,12 @@ namespace MVCForm.Controllers
 			return View();
 		}
 
-		private OrderModel CreateOrderModel(string meal, DateTime dateFrom, DateTime dateTo /*string date*/)
+		private OrderModel CreateOrderModel(int meal, DateTime dateFrom, DateTime dateTo /*string date*/)
 		{
 			OrderModel order = new OrderModel
 			{
 				Client = ((AccountModel)Session["CurrentUser"]).Email,
-				MealId = Convert.ToInt32(meal),
+				MealId = meal,
 				DateFrom = dateFrom,
 				DateTo = dateTo
 			};

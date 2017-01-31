@@ -45,29 +45,26 @@
 					<div class="form-group">
 						<label for="meal-id">Choose Meal</label>
 						<select class="form-control" id="meal-id" name="meal" required>
-							<option value="1">Meal 01</option>
-							<option value="2">Meal 02</option>
-							<option value="3">Meal 03</option>
-							<optgroup label="Vegan Food">
-								<option value="4">Vegan Meal 04</option>
-								<option value="5">Vegan Meal 05</option>
-								<option value="6">Vegan Meal 06</option>
-							</optgroup>
+							@foreach (MealModel meal in (List<MealModel>)Session["Meals"] ?? new List<MealModel>())
+							{
+								<option value="@meal.Id">(@meal.Type) @meal.Name</option>
+							}
 						</select>
 					</div>
 					<div class="form-group">
 						<input type="date" class="glyphicon-calendar form-control" name="dateTo" placeholder="" required />
 					</div>
-
-					@{
-						if ((AccountModel)Session["CurrentUser"] != null)
-						{
-							<input type="submit" class="btn btn-info" value="Submit" />
-						}
-						else
-						{
-							<input style="cursor: not-allowed" type="submit" class="btn btn-danger" value="You must First Login" disabled />
-						}
+					@if (Session["Meals"] == null)
+					{
+						<input style="cursor: not-allowed" type="submit" class="btn btn-danger" value="There is no meal set" disabled />
+					}
+					else if (Session["CurrentUser"] == null)
+					{
+						<input style="cursor: not-allowed" type="submit" class="btn btn-danger" value="You must Log in First" disabled />
+					}
+					else
+					{
+						<input type="submit" class="btn btn-info" value="Order" />
 					}
 				</fieldset>
 			</form>
@@ -143,6 +140,13 @@
 					<div class="form-group">
 						<label for="calories">Calories</label>
 						<input type="number" class="form-control" id="calories" name="calories" placeholder="Amount of Calories" required />
+					</div>
+					<div class="form-group">
+						<label for="meal-type"></label>
+						<select class="form-control" id="meal-type" name="mealType">
+							<option value="Normal">Normal Meal</option>
+							<option value="Vegan">Vegan Meal</option>
+						</select>
 					</div>
 					<div class="form-group">
 						<label>Allergens (To choose multiple options, hold ctrl or shift)</label>

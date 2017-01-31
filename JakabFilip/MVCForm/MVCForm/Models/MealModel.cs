@@ -13,5 +13,6 @@ namespace MVCForm.Models
 
 		public List<Allergens> Allergens { get; set; } = new List<Allergens>();
 
+		public MealType Type { get; set; }
 	}
 }
