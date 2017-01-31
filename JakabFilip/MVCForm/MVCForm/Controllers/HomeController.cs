@@ -159,7 +159,7 @@ namespace MVCForm.Controllers
 		{
 			if (Accounts.Any(account => account.Email == email))
 			{
-				ViewData["RegisterMsg"] = "Email is already Taken";
+				ViewData["RegisterMsg"] = "Email již byl použit";
 				return View();
 			}
 			var registerAccount = new AccountModel
@@ -184,7 +184,7 @@ namespace MVCForm.Controllers
 
 			Accounts.Add(registerAccount);
 
-			ViewData["RegisterMsg"] = "Registration Successful";
+			ViewData["RegisterMsg"] = "Registrace úspěšná";
 			return View();
 		}
 
@@ -195,10 +195,10 @@ namespace MVCForm.Controllers
 			{
 				if (email != account.Email || password != account.Password) continue;
 				CurrentUser = account;
-				ViewData["LoginMsg"] = "Login successful";
+				ViewData["LoginMsg"] = "Přihlášení proběhlo úspěšně";
 				return View();
 			}
-			ViewData["LoginMsg"] = "Email or password is incorrect";
+			ViewData["LoginMsg"] = "Zadaný Email a Heslo se neshodují";
 			return View();
 		}
 
