@@ -11,8 +11,6 @@ namespace MVCForm.Controllers
 {
 	public class HomeController : Controller
 	{
-		#region Session values
-
 		public List<OrderModel> Orders
 		{
 			get
@@ -72,12 +70,15 @@ namespace MVCForm.Controllers
 			}
 		}
 
-
-		#endregion
-
 		public ActionResult Index()
 		{
-			//var session = Session;
+			Accounts.Add(new AccountModel
+			{
+				Birthday = new DateTime(),
+				Email = "admin@admin.ad",
+				Password = "admin",
+				UserType = UserTypes.Externist
+			});
 
 			return View();
 		}
@@ -107,13 +108,14 @@ namespace MVCForm.Controllers
 		}
 
 		[HttpGet]
-		public ActionResult CreateMeal(string mealName, int calories, string[] allergens)
+		public ActionResult CreateMeal(string mealName, int calories, MealType mealType, string[] allergens)
 		{
 			var meal = new MealModel
 			{
 				Name = mealName,
 				Calories = calories,
-				Id = Meals.Count
+				Id = Meals.Count,
+				Type = mealType
 			};
 			foreach (string allergen in allergens)
 			{
@@ -143,13 +145,13 @@ namespace MVCForm.Controllers
 		}
 
 		[HttpGet]
-		public ActionResult SaveOrder(string meal, DateTime dateTo)
+		public ActionResult SaveOrder(int meal, DateTime dateTo)
 		{
 			var order = CreateOrderModel(meal, DateTime.Now, dateTo);
 
 			Orders.Add(order);
 
-			return View(Orders);
+			return View();
 		}
 
 		[HttpGet]
@@ -157,7 +159,7 @@ namespace MVCForm.Controllers
 		{
 			if (Accounts.Any(account => account.Email == email))
 			{
-				ViewData["RegisterMsg"] = "Email is already Taken";
+				ViewData["RegisterMsg"] = "Email již byl použit";
 				return View();
 			}
 			var registerAccount = new AccountModel
@@ -182,7 +184,7 @@ namespace MVCForm.Controllers
 
 			Accounts.Add(registerAccount);
 
-			ViewData["RegisterMsg"] = "Registration Successful";
+			ViewData["RegisterMsg"] = "Registrace úspěšná";
 			return View();
 		}
 
@@ -193,26 +195,19 @@ namespace MVCForm.Controllers
 			{
 				if (email != account.Email || password != account.Password) continue;
 				CurrentUser = account;
-				ViewData["LoginMsg"] = "Login successful";
+				ViewData["LoginMsg"] = "Přihlášení proběhlo úspěšně";
 				return View();
 			}
-			ViewData["LoginMsg"] = "Email or password is incorrect";
+			ViewData["LoginMsg"] = "Zadaný Email a Heslo se neshodují";
 			return View();
 		}
-		
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="meal"></param>
-		/// <param name="dateFrom"></param>
-		/// <param name="dateTo"></param>
-		/// <returns></returns>
-		private OrderModel CreateOrderModel(string meal, DateTime dateFrom, DateTime dateTo /*string date*/)
+
+		private OrderModel CreateOrderModel(int meal, DateTime dateFrom, DateTime dateTo /*string date*/)
 		{
 			OrderModel order = new OrderModel
 			{
 				Client = ((AccountModel)Session["CurrentUser"]).Email,
-				MealId = Convert.ToInt32(meal),
+				MealId = meal,
 				DateFrom = dateFrom,
 				DateTo = dateTo
 			};
