@@ -1,35 +1,63 @@
 ﻿
 @{
-    ViewBag.Title = "Administration";
+    //ViewBag.Title = "Administration";
 }
 
 <div class="container-fluid">
 	<h2>Administration</h2>
 	<div class="row">
-		<div class="col-lg-4">
-			
-		</div>
-	</div>
-	<div class="row">
 		<div class="col-md-12">
-			<h3>User administration</h3>
-			
-			<table class="table">
-				<thead>
-				<tr>
-					<td>First Name</td>
-					<td>Last Name</td>
-					<td>User type</td>
-				</tr>
-				</thead>
-				<tbody>
-				<tr>
-					<td>Albert</td>
-					<td>Moravec</td>
-					<td>Student</td>
-				</tr>
-				</tbody>
-			</table>
+			<!-- Nav tabs -->
+			<ul class="nav nav-tabs" role="tablist">
+				<li role="presentation" class="active"><a href="#meals" aria-controls="home" role="tab" data-toggle="tab">Meals</a></li>
+				<li role="presentation"><a href="#users" aria-controls="profile" role="tab" data-toggle="tab">Users</a></li>
+			</ul>
+
+			<!-- Tab panes -->
+			<div class="tab-content">
+				<div role="tabpanel" class="tab-pane active" id="meals">
+					<div class="row">
+						<div class="col-md-4">
+							@using (Html.BeginForm("SaveMeal", "Meal"))
+							{
+								@Html.TextBox("Name")
+							}
+						</div>
+						<div class="col-md-8">
+							<table class="table">
+								<thead>
+								<tr>
+									<th>Name</th>
+									<th></th>
+								</tr>
+								</thead>
+							</table>
+						</div>
+					</div>
+				</div>
+				<div role="tabpanel" class="tab-pane" id="users">
+					<div class="row">
+						<div class="col-md-12">
+							<table class="table">
+								<thead>
+									<tr>
+										<th>First Name</th>
+										<th>Last Name</th>
+										<th>User type</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>Albert</td>
+										<td>Moravec</td>
+										<td>Student</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
 </div>
