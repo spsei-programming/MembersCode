@@ -11,6 +11,8 @@ namespace MVCForm.Controllers
 {
 	public class HomeController : Controller
 	{
+		#region Session values
+
 		public List<OrderModel> Orders
 		{
 			get
@@ -69,6 +71,9 @@ namespace MVCForm.Controllers
 				return (List<MealModel>)Session["Meals"];
 			}
 		}
+
+
+		#endregion
 
 		public ActionResult Index()
 		{
@@ -144,7 +149,7 @@ namespace MVCForm.Controllers
 
 			Orders.Add(order);
 
-			return View();
+			return View(Orders);
 		}
 
 		[HttpGet]
@@ -194,7 +199,14 @@ namespace MVCForm.Controllers
 			ViewData["LoginMsg"] = "Email or password is incorrect";
 			return View();
 		}
-
+		
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="meal"></param>
+		/// <param name="dateFrom"></param>
+		/// <param name="dateTo"></param>
+		/// <returns></returns>
 		private OrderModel CreateOrderModel(string meal, DateTime dateFrom, DateTime dateTo /*string date*/)
 		{
 			OrderModel order = new OrderModel
