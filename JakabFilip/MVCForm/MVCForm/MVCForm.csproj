@@ -191,6 +191,7 @@
     <Content Include="Views\Home\CreateMeal.cshtml" />
     <Content Include="Views\Booking\Table.cshtml" />
     <Content Include="Views\Booking\SaveTable.cshtml" />
+    <Content Include="Views\Home\Forms02.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
