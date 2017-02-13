@@ -53,7 +53,7 @@ namespace MVCForm.Controllers
 				}
 				else
 				{
-					throw new UnauthorizedAccessException("User Not Found");
+					throw new UnauthorizedAccessException("Uživatel Nenalezen");
 				}
 			}
 		}
