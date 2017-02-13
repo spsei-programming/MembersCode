@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VegetablesToday", "VegetablesToday\VegetablesToday.csproj", "{355D1DBC-F670-41BB-B79D-CD874ED64453}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VegetablesToday.Providers", "Providers\VegetablesToday.Providers.csproj", "{9B6ACBF8-144D-4CC7-9A2E-9CA1CDEC0CB5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VegetablesToday.Data", "Data\VegetablesToday.Data.csproj", "{778821A1-6364-4D94-BF06-859E6565E02B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{355D1DBC-F670-41BB-B79D-CD874ED64453}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{355D1DBC-F670-41BB-B79D-CD874ED64453}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{355D1DBC-F670-41BB-B79D-CD874ED64453}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{355D1DBC-F670-41BB-B79D-CD874ED64453}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9B6ACBF8-144D-4CC7-9A2E-9CA1CDEC0CB5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9B6ACBF8-144D-4CC7-9A2E-9CA1CDEC0CB5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9B6ACBF8-144D-4CC7-9A2E-9CA1CDEC0CB5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9B6ACBF8-144D-4CC7-9A2E-9CA1CDEC0CB5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{778821A1-6364-4D94-BF06-859E6565E02B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{778821A1-6364-4D94-BF06-859E6565E02B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{778821A1-6364-4D94-BF06-859E6565E02B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{778821A1-6364-4D94-BF06-859E6565E02B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
