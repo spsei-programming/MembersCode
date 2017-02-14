@@ -183,7 +183,6 @@
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\Home\Forms.cshtml" />
     <Content Include="Views\Home\SaveOrder.cshtml" />
     <Content Include="Views\Home\Tables.cshtml" />
     <Content Include="Views\Home\Register.cshtml" />
@@ -191,7 +190,7 @@
     <Content Include="Views\Home\CreateMeal.cshtml" />
     <Content Include="Views\Booking\Table.cshtml" />
     <Content Include="Views\Booking\SaveTable.cshtml" />
-    <Content Include="Views\Home\Forms02.cshtml" />
+    <Content Include="Views\Home\Forms.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
