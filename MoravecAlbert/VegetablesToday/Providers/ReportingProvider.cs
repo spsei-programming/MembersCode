@@ -1,25 +1,41 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Data.Base;
+using Data.Enums;
 
 namespace Providers
 {
 	public class ReportingProvider
 	{
-		public List<ProductOfNature> Type { get; set; }
+		public List<ProductOfNature> stock;
 
-		public ReportingProvider()
+		public ReportingProvider(List<ProductOfNature> stock)
 		{
-			Type = new List<ProductOfNature>(50);
+			this.stock = stock;
 		}
 
-		public void AddToStock(ProductOfNature item)
+		public decimal CalculateTotalStockPriceOfAllVegetables()
 		{
-			Type.Add(item);
+			return CalculateTotalStockPriceOfAllKind(Kinds.Vegetable);
 		}
 
-		public void RemoveFromStock(int amount)
+		public decimal CalculateTotalStockPriceOfAllFruits()
 		{
-			
+			return CalculateTotalStockPriceOfAllKind(Kinds.Fruit);
+		}
+
+		public decimal CalculateTotalStockPriceOfAllKind(Kinds kind)
+		{
+			return stock.Where(x => x.Kind == kind).Sum(x => x.TotalPrice);
+		}
+
+		public void DisplayAllItemsAfterBestBefore()
+		{
+			stock.Where(x => x.BestBefore < DateTime.Now).ToList().ForEach(x =>
+			{
+				Console.WriteLine(); //TODO So tired...
+			});
 		}
 	}
 }
