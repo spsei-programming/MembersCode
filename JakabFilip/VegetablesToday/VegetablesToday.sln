@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VegetablesToday", "Vegetabl
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VegateblesToday.Providers", "VegateblesToday.Providers\VegateblesToday.Providers.csproj", "{0801CD1C-1BB7-4D05-96DF-CCD4C2891B3E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VegetablesToday.Data", "VegetablesToday.Data\VegetablesToday.Data.csproj", "{EC308FAB-A863-4893-BAEC-7D15B039C396}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VegetablesToday.Data", "VegetablesToday.Data1\VegetablesToday.Data.csproj", "{CC26836B-6F68-44EA-934A-F2DA95337EC6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,10 +23,10 @@ Global
 		{0801CD1C-1BB7-4D05-96DF-CCD4C2891B3E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0801CD1C-1BB7-4D05-96DF-CCD4C2891B3E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0801CD1C-1BB7-4D05-96DF-CCD4C2891B3E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{EC308FAB-A863-4893-BAEC-7D15B039C396}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EC308FAB-A863-4893-BAEC-7D15B039C396}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EC308FAB-A863-4893-BAEC-7D15B039C396}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EC308FAB-A863-4893-BAEC-7D15B039C396}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CC26836B-6F68-44EA-934A-F2DA95337EC6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CC26836B-6F68-44EA-934A-F2DA95337EC6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CC26836B-6F68-44EA-934A-F2DA95337EC6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CC26836B-6F68-44EA-934A-F2DA95337EC6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

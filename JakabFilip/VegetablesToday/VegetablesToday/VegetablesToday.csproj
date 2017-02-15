@@ -54,8 +54,8 @@
       <Project>{0801cd1c-1bb7-4d05-96df-ccd4c2891b3e}</Project>
       <Name>VegateblesToday.Providers</Name>
     </ProjectReference>
-    <ProjectReference Include="..\VegetablesToday.Data\VegetablesToday.Data.csproj">
-      <Project>{ec308fab-a863-4893-baec-7d15b039c396}</Project>
+    <ProjectReference Include="..\VegetablesToday.Data1\VegetablesToday.Data.csproj">
+      <Project>{cc26836b-6f68-44ea-934a-f2da95337ec6}</Project>
       <Name>VegetablesToday.Data</Name>
     </ProjectReference>
   </ItemGroup>

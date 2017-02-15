@@ -4,17 +4,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{0801CD1C-1BB7-4D05-96DF-CCD4C2891B3E}</ProjectGuid>
+    <ProjectGuid>{CC26836B-6F68-44EA-934A-F2DA95337EC6}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>VegateblesToday.Providers</RootNamespace>
-    <AssemblyName>VegateblesToday.Providers</AssemblyName>
+    <RootNamespace>VegetablesToday.Data</RootNamespace>
+    <AssemblyName>VegetablesToday.Data</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -24,7 +22,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -32,14 +29,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup>
-    <StartupObject />
-  </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -50,20 +40,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IOProvider.cs" />
+    <Compile Include="Apple.cs" />
+    <Compile Include="Base\ProductOfNature.cs" />
+    <Compile Include="Cucumber.cs" />
+    <Compile Include="Enums\Kind.cs" />
+    <Compile Include="Enums\MeasuringBy.cs" />
+    <Compile Include="Enums\WeightUnit.cs" />
+    <Compile Include="Kiwi.cs" />
+    <Compile Include="Onion.cs" />
+    <Compile Include="Orange.cs" />
+    <Compile Include="Pineapple.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ReportProvider.cs" />
-    <Compile Include="StockProvider.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\VegetablesToday.Data1\VegetablesToday.Data.csproj">
-      <Project>{cc26836b-6f68-44ea-934a-f2da95337ec6}</Project>
-      <Name>VegetablesToday.Data</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
