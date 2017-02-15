@@ -35,8 +35,9 @@ namespace VegetablesToday
 			Console.WriteLine($"Total fruit price: {reportingProvider.CalculateTotalStockPriceOfAllFruits()}");
 			stockProvider.RemoveFromStock("Orange", 2);
 			Console.WriteLine($"Total fruit price: {reportingProvider.CalculateTotalStockPriceOfAllFruits()}");
-			reportingProvider.DisplayAllItemsAfterBestBefore();
 
+			IOProvider io = new IOProvider(stockProvider.Stock);
+			io.ExportVendorXml(@"C:\temp\out.xml");
 			Console.ReadKey();
 		}
 	}

@@ -30,12 +30,9 @@ namespace Providers
 			return stock.Where(x => x.Kind == kind).Sum(x => x.TotalPrice);
 		}
 
-		public void DisplayAllItemsAfterBestBefore()
+		public List<ProductOfNature> GetAllItemsAfterBestBefore()
 		{
-			stock.Where(x => x.BestBefore < DateTime.Now).ToList().ForEach(x =>
-			{
-				Console.WriteLine(); //TODO So tired...
-			});
+			return stock.Where(x => x.BestBefore < DateTime.Now).ToList();
 		}
 	}
 }
