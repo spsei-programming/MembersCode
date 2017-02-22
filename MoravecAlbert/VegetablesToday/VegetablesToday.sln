@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VegetablesToday.Providers",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VegetablesToday.Data", "Data\VegetablesToday.Data.csproj", "{778821A1-6364-4D94-BF06-859E6565E02B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VegetablesToday.Helpers", "VegetablesToday.Helpers\VegetablesToday.Helpers.csproj", "{B19238F1-CB54-4915-94A3-28528CEC66B7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{778821A1-6364-4D94-BF06-859E6565E02B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{778821A1-6364-4D94-BF06-859E6565E02B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{778821A1-6364-4D94-BF06-859E6565E02B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B19238F1-CB54-4915-94A3-28528CEC66B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B19238F1-CB54-4915-94A3-28528CEC66B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B19238F1-CB54-4915-94A3-28528CEC66B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B19238F1-CB54-4915-94A3-28528CEC66B7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

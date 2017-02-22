@@ -34,7 +34,7 @@ namespace Data.Base
 			}
 		}
 
-		protected ProductOfNature(string name, Kinds kind, Measurings measuringBy, WeightUnits? weightUnit)
+		public ProductOfNature(string name, Kinds kind, Measurings measuringBy, WeightUnits? weightUnit)
 		{
 			Kind = kind;
 			MeasuringBy = measuringBy;

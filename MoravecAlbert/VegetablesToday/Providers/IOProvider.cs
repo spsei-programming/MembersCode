@@ -12,7 +12,6 @@ namespace Providers
 		private List<ProductOfNature> stock;
 
 		JsonSerializer jsonSerializer = new JsonSerializer();
-		XmlSerializer xmlSerializer = new XmlSerializer(typeof(ProductOfNature));
 
 		public IOProvider(List<ProductOfNature> stock)
 		{
@@ -39,17 +38,9 @@ namespace Providers
 
 		public ProductOfNature ImportVendorXml(string path)
 		{
-			using (StreamReader streamReader = new StreamReader(path))
+			using (TextReader textReader = new StreamReader(path))
 			{
-				return xmlSerializer.Deserialize(streamReader) as ProductOfNature;
-			}
-		}
-
-		public void ExportVendorXml(string path)
-		{
-			using (StreamWriter streamWriter = new StreamWriter(path))
-			{
-				xmlSerializer.Serialize(streamWriter, stock);
+				return XmlMapping
 			}
 		}
 	}
