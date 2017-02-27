@@ -1,4 +1,5 @@
-﻿using System.Configuration;
+﻿using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.Data.OleDb;
 using System.Data.SqlClient;
@@ -25,6 +26,28 @@ namespace MVCForms.Providers
 
 				connection.Open();
 				cmd.ExecuteNonQuery();
+				connection.Close();
+			}
+		}
+
+		public List<object> GetAllergens()
+		{
+			string connectionString = ConfigurationManager.ConnectionStrings["MealsDB"].ConnectionString;
+
+			using (SqlConnection connection = new SqlConnection(connectionString))
+			{
+				SqlCommand cmd = new SqlCommand();
+				cmd.Connection = connection;
+				cmd.CommandText = "SELECT *" +
+				                  "FROM Allergens;";
+				connection.Open();
+				using (SqlDataReader dataReader = cmd.ExecuteReader())
+				{
+					while (dataReader.NextResult())
+					{
+						var x = dataReader["Name"] as string;
+					}
+				}
 				connection.Close();
 			}
 		}
