@@ -8,7 +8,7 @@ namespace VegateblesToday.Providers
 {
 	public class StockProvider
 	{
-		public List<ProductOfNature> Stock { get; } = new List<ProductOfNature>();
+		public List<ProductOfNature> Stock { get; set; } = new List<ProductOfNature>();
 
 		private List<ProductOfNature> LoadData(string path)
 		{
@@ -20,9 +20,9 @@ namespace VegateblesToday.Providers
 			throw new NotImplementedException();
 		}
 
-		public List<ProductOfNature> OrderStock()
+		public void OrderStock()
 		{
-			return Stock.OrderByDescending(x => x.BestBefore).ToList();
+			Stock =  Stock.OrderByDescending(x => x.BestBefore).ToList();
 		}
 
 		public List<ProductOfNature> SortStock(Kind kind)
@@ -37,6 +37,7 @@ namespace VegateblesToday.Providers
 
 		public void RemoveFromStock(ProductOfNature item)
 		{
+			OrderStock();
 			Stock.Remove(item);
 		}
 	}

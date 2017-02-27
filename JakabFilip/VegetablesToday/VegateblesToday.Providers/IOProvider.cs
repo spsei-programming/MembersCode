@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Xml.Serialization;
 using Newtonsoft.Json;
 using VegetablesToday.Data.Base;
 
@@ -16,14 +17,22 @@ namespace VegateblesToday.Providers
 			File.AppendAllText(path, jsonDatas);
 		}
 
-		public List<ProductOfNature> LoadAllDataFromJSON()
+		public List<ProductOfNature> LoadAllDataFromJSON(string path)
 		{
-			throw new NotImplementedException();
+			return (List<ProductOfNature>) JsonConvert.DeserializeObject(path);
 		}
 
-		public List<ProductOfNature> ImportDataFromXML()
+		public List<ProductOfNature> ImportDataFromXML(string path)
 		{
-			throw new NotImplementedException();
+			var provider = new XmlSerializer(typeof(List<ProductOfNature>));
+
+			using (Stream stream = File.OpenRead(path))
+			{
+				foreach (ProductOfNature nature in (List<ProductOfNature>) provider.Deserialize(stream))
+				{
+					
+				}
+			}
 		}
 	}
 }
