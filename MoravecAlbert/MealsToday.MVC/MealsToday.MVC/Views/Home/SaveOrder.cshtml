@@ -1,0 +1,63 @@
+﻿@using MVCForm.Models;
+@{
+	ViewBag.Title = "SaveOrder";
+}
+
+<h2>Vaše objednávka byla úspěšně Uložena</h2>
+
+@{
+	var order = ((List<OrderModel>)Session["Orders"]).ElementAt(((List<OrderModel>)Session["Orders"]).Count - 1);
+}
+
+<div class="row">
+	<div class="col-md-6">
+		<table class="table">
+			<caption style="text-align: center;">Order</caption>
+			<thead>
+				<tr>
+					<th>
+						User
+					</th>
+					<th>
+						Meal
+					</th>
+					<th>
+						Date of Order
+					</th>
+					<th>
+						Date to be Ordered
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<th>
+						@order.Client
+					</th>
+					<td>
+						@order.MealId
+					</td>
+					<td>
+						@order.DateFrom
+					</td>
+					<td>
+						@order.DateTo.ToString("dd.MM.yyyy")
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-2">
+		<button style="margin: 3%;" type="button" class="btn btn-success" onclick="window.location.href='@Url.Action("Index", "Home")'">
+			Back To Main Page
+		</button>
+	</div>
+	<div class="col-md-2">
+		<button style="margin: 3%;" type="button" class="btn btn-info" onclick="window.location.href='@Url.Action("Forms", "Home")'">
+			Back To Forms Page
+		</button>
+	</div>
+</div>
+
