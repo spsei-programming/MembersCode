@@ -14,63 +14,78 @@ namespace MealsToday.MVC.Providers
 {
 	public class DatabaseProvider
 	{
-		public void CreateAllergen(string name, byte number)
-		{
-			// 1. Create SQL connection
-			// 2. Create SQL command 
-			// 3. Read data if necessary or required with Sql reader or data provider
 
+		protected void Exec(string sql, Action<SqlCommand> what)
+		{
 			var connectionString = ConfigurationManager.ConnectionStrings["MealsDB"].ConnectionString;
 
 			using (SqlConnection conn = new SqlConnection(connectionString))
 			{
 				SqlCommand cmd = conn.CreateCommand();
 
-				cmd.CommandText = $"insert into Allergen(Name, Number) " +
-													$"values ('{name}', {number})";
+				cmd.CommandText = sql;
 				cmd.CommandType = CommandType.Text;
 
 				conn.Open();
-				cmd.ExecuteNonQuery();
+
+				what(cmd);
+
 				conn.Close();
 			}
 		}
 
-		public List<Allergen> GetAllergens()
+		protected void ExecNonQuery(string sql)
 		{
-			var connectionString = ConfigurationManager.ConnectionStrings["MealsDB"].ConnectionString;
+			Exec(sql, cmd => cmd.ExecuteNonQuery());
+		}
 
-			using (SqlConnection conn = new SqlConnection(connectionString))
+		protected List<T> ExecuteQuery<T>(string sql, Func<SqlDataReader, T> mapFunc, CommandBehavior? behavior = null)
+		{
+			List<T> list = new List<T>(50);
+
+			Exec(sql, cmd =>
 			{
-				SqlCommand cmd = conn.CreateCommand();
-
-				cmd.CommandText = $"select * from Allergen";
-				cmd.CommandType = CommandType.Text;
-
-				conn.Open();
-
-				List<Allergen> allergens = new List<Allergen>();
-
-				using (var reader = cmd.ExecuteReader())
+				using (var reader = cmd.ExecuteReader(!behavior.HasValue ? CommandBehavior.Default : behavior.Value))
 				{
 					if (reader.HasRows)
 						while (reader.Read())
 						{
-							Allergen al;
-							al.Name = reader["Name"] as string;
-							al.Number = Convert.ToByte(reader["Number"]);
-							al.AllergenId = Convert.ToInt16(reader["AllergenId"]);
-
-							allergens.Add(al);
+							list.Add(mapFunc(reader));
 						}
 				}
+			});
 
-				conn.Close();
+			return list;
+		}
 
-				return allergens;
-			}
+		protected T ExecuteSingleQuery<T>(string sql, Func<SqlDataReader, T> mapFunc)
+		{
+			return ExecuteQuery(sql, mapFunc, CommandBehavior.SingleRow).FirstOrDefault();
+		}
 
-			return null;
+		public void CreateAllergen(string name, byte number)
+		{
+
+			var sql = $"insert into Allergen(Name, Number) values ('{name}', {number})";
+
+			ExecNonQuery(sql);
+		}
+
+		public List<Allergen> GetAllergens()
+		{
+
+			var sql = $"select * from Allergen";
+
+			return ExecuteQuery(sql, reader =>
+			{
+				Allergen al = new Allergen();
+
+				al.Name = reader["Name"] as string;
+				al.Number = Convert.ToByte(reader["Number"]);
+				al.AllergenId = Convert.ToInt16(reader["AllergenId"]);
+
+				return al;
+			});
 		}
 
 		public Allergen GetAllergen(short allergenId)
@@ -103,8 +118,6 @@ namespace MealsToday.MVC.Providers
 							return al;
 						}
 				}
-
-
 			}
 			throw new ArgumentOutOfRangeException(nameof(allergenId), $"Could not find an allergen with Id: {allergenId}");
 		}
@@ -122,19 +135,8 @@ namespace MealsToday.MVC.Providers
 
 			sql += $" where allergenId = {allergenId}";
 
-			var connectionString = ConfigurationManager.ConnectionStrings["MealsDB"].ConnectionString;
+			ExecNonQuery(sql);
 
-			using (SqlConnection conn = new SqlConnection(connectionString))
-			{
-				SqlCommand cmd = conn.CreateCommand();
-
-				cmd.CommandText = sql;
-				cmd.CommandType = CommandType.Text;
-
-				conn.Open();
-				cmd.ExecuteNonQuery();
-				conn.Close();
-			}
 			return GetAllergen(allergenId);
 		}
 
@@ -150,20 +152,9 @@ namespace MealsToday.MVC.Providers
 
 		public void DeleteAllergen(short allergenId)
 		{
-			string sql = $"DELETE FROM dbo.Allergen WHERE {allergenId}";
+			string sql = $"DELETE FROM dbo.Allergen WHERE AllergenId{allergenId}";
 
-			var connectionString = ConfigurationManager.ConnectionStrings["MealsDB"].ConnectionString;
-
-			using (SqlConnection conn = new SqlConnection(connectionString))
-			{
-				SqlCommand cmd = conn.CreateCommand();
-
-				cmd.CommandText = sql;
-				cmd.CommandType = CommandType.Text;
-
-				conn.Open();
-			}
-
+			ExecNonQuery(sql);
 		}
 	}
 }
