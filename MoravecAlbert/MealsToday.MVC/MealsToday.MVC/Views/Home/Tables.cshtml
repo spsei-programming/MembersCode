@@ -1,0 +1,122 @@
+﻿@using MVCForm.Models
+@using MVCForm.Models.Enums
+@{
+	ViewBag.Title = "MealOrders";
+}
+
+<div class="row">
+	<div class="col-md-2">
+		<button style="margin-top: 3%;" type="button" class="btn btn-info" data-toggle="collapse" data-target="#orders-table">
+			Objednávky ⟫
+		</button>
+	</div>
+	<div class="col-md-2">
+		<button style="margin-top: 3%;" type="button" class="btn btn-info" data-toggle="collapse" data-target="#meals-table">
+			Jídla ⟫
+		</button>
+	</div>
+</div>
+
+<div class="row collapse" id="orders-table">
+	<div class="col-md-6 col-md-offset-2">
+		<table class="table table-hover">
+			<thead>
+				<tr>
+					<th>
+						Uživatel
+					</th>
+					<th>
+						Jídlo
+					</th>
+					<th>
+						Datum zadání
+					</th>
+					<th>
+						Datum objednávky
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+
+				@foreach (OrderModel order in (List<OrderModel>)Session["Orders"] ?? new List<OrderModel>())
+				{
+					<tr>
+						<td>
+							@order.Client
+						</td>
+						<td>
+							@order.MealId
+						</td>
+						<td>
+							@order.DateFrom.ToString("dd.MM.yyyy")
+						</td>
+						<td>
+							@order.DateTo.ToString("dd.MM.yyyy")
+						</td>
+					</tr>
+			}
+			</tbody>
+		</table>
+	</div>
+</div>
+
+<div id="meals-table" class="row collapse">
+	<div class="col-md-6 col-md-offset-2">
+		<table class="table table-hover">
+			<thead>
+			<tr>
+				<th>
+					Název jídla
+				</th>
+				<th>
+					typ jídla
+				</th>
+				<th>
+					ID jídla
+				</th>
+				<th>
+					Kalorie
+				</th>
+				<th>
+					Allergeny
+				</th>
+			</tr>
+			</thead>
+			<tbody>
+
+				@foreach (MealModel meal in (List<MealModel>)Session["Meals"] ?? new List<MealModel>())
+				{
+					<tr>
+						<td>
+							@meal.Name
+						</td>
+						<td>
+							@meal.Type.ToString()
+						</td>
+						<td>
+							@meal.Id
+						</td>
+						<td>
+							@meal.Calories
+						</td>
+						<td>
+							<div class="dropdown">
+								<button id="@meal.Id" type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">
+									Allergeny
+									<span class="caret"></span>
+								</button>
+								<ul class="dropdown-menu" aria-labelledby="@meal.Id">
+									@foreach (Allergens alergen in meal.Allergens)
+									{
+										<li style="padding-left: 4%;">@alergen.ToString()</li>
+									}
+								</ul>
+							</div>
+						</td>
+					</tr>
+			}
+
+			</tbody>
+		</table>
+	</div>
+</div>
