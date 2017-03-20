@@ -1,0 +1,185 @@
+﻿@using MVCForm.Models
+@{
+	Layout = "~/Views/Shared/_Layout.cshtml";
+	var user = Session["CurrentUser"] == null ? "Žádný uživatel není přihlášen" : ((AccountModel)Session["CurrentUser"]).Email;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+	<meta name="viewport" content="width=device-width" />
+	<title>Forms</title>
+</head>
+<body>
+	<div class="row" style="margin-bottom: 2%;">
+		<div class="col-md-2">
+			<button style="margin: 5% 0 2% 0;" type="button" data-toggle="collapse" data-target="#registration" class="btn btn-info">
+				Registrace ⟫
+			</button>
+		</div>
+		<div class="col-md-2">
+			<button style="margin: 5% 0 2% 0;" type="button" data-toggle="collapse" data-target="#login" class="btn btn-info">
+				Přihlášení ⟫
+			</button>
+		</div>
+		<div class="col-md-2">
+			<button style="margin: 5% 0 2% 0;" type="button" data-toggle="collapse" data-target="#meal-order" class="btn btn-info">
+				Objednání jídla ⟫
+			</button>
+		</div>
+		<div class="col-md-2">
+			<button style="margin: 5% 0 2% 0;" type="button" data-toggle="collapse" data-target="#create-meal" class="btn btn-info">
+				Vytvoření Jídla ⟫
+			</button>
+		</div>
+	</div>
+
+	<!--MEAL ORDER-->
+	<div id="meal-order" class="row collapse" style="margin-bottom: 2%;">
+		<div class="col-md-4 col-md-offset-4">
+			<form id="meal-order-form" action="/Home/SaveOrder" method="get">
+				<fieldset>
+					<legend>Objednávka Jídla</legend>
+					@if (Session["Currentuser"] != null)
+					{
+						<label><label class="label label-info visible-lg">Aktuální uživatel: @user</label></label>
+					}
+					else
+					{
+						<label class="label label-danger">Aktuální uživatel: @user</label>
+					}
+					<div class="form-group">
+						<label for="meal-id">Vyber si jídlo</label>
+						<select class="form-control" id="meal-id" name="meal" required>
+							@foreach (MealModel meal in (List<MealModel>)Session["Meals"] ?? new List<MealModel>())
+							{
+								<option value="@meal.Id">(@meal.Type) @meal.Name</option>
+							}
+						</select>
+					</div>
+					<div class="form-group">
+						<label for="date">Na kdy ?</label>
+						<input type="date" id="date" class="glyphicon-calendar form-control" name="dateTo" required/>
+					</div>
+					@if (Session["Meals"] == null)
+					{
+						<input style="cursor: not-allowed" type="submit" class="btn btn-danger" value="V seznamu nejsou žádné jídla" disabled />
+					}
+					else if (Session["CurrentUser"] == null)
+					{
+						<input style="cursor: not-allowed" type="submit" class="btn btn-danger" value="Nejprve se musíš přihlásit" disabled />
+					}
+					else
+					{
+						<input type="submit" class="btn btn-info" value="Objednat" />
+					}
+				</fieldset>
+			</form>
+		</div>
+	</div>
+
+	<!--REGISTRATION-->
+	<div id="registration" class="row collapse" style="margin-bottom: 2%;">
+		<div class="col-md-4 col-md-offset-4">
+			<form id="registration-form" action="/Home/Register" method="get">
+				<fieldset>
+					<legend>Registrace</legend>
+					<div class="form-group">
+						<input type="email" class="form-control" name="email" placeholder="E-mailová Adresa" required="required" />
+					</div>
+					<div class="form-group">
+						<input type="password" class="form-control" name="password" placeholder="Heslo" required="required" />
+					</div>
+					<div class="form-group">
+						<div class="radio-inline">
+							<input type="radio" class="radio-inline" id="student" name="userType" value="student" required />
+							<label for="student">Student</label>
+						</div>
+						<div class="radio-inline">
+							<input type="radio" class="radio-inline" id="personal" name="userType" value="teacher" required />
+							<label for="personal">Učitel</label>
+						</div>
+						<div class="radio-inline">
+							<input type="radio" class="radio-inline" id="externist" name="userType" value="externist" required />
+							<label for="externist">Externista</label>
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="birthday">Datum narození</label>
+						<input type="date" class="form-control glyphicon-calendar" id="birthday" name="birthday" required>
+					</div>
+					<input type="submit" class="btn btn-info" value="Zaregistrovat se" />
+				</fieldset>
+			</form>
+		</div>
+	</div>
+
+	<!--LOGIN-->
+	<div id="login" class="row collapse" style="margin-bottom: 2%;">
+		<div class="col-md-4 col-md-offset-4">
+			<form id="login-form" action="/Home/Login" method="get">
+				<fieldset>
+					<legend>Přihlášení</legend>
+					<div class="form-group">
+						<label for="email">E-mail</label>
+						<input type="email" class="form-control" id="email" name="email" placeholder="E-mail" required />
+					</div>
+					<div class="form-group">
+						<label for="password">Heslo</label>
+						<input type="password" class="form-control" id="password" name="password" placeholder="Heslo" required />
+					</div>
+					<input type="submit" class="btn btn-info" value="Přihlásit se" />
+				</fieldset>
+			</form>
+		</div>
+	</div>
+
+	<!--MEAL CREATE-->
+	<div id="create-meal" class="row collapse" style="margin-bottom: 2%">
+		<div class="col-md-4 col-md-offset-4">
+			<form id="create-meal-form" action="/Home/CreateMeal" method="get">
+				<fieldset>
+					<legend>Vztvořit Jídlo</legend>
+					<div class="form-group">
+						<label for="meal-name">Název jídla</label>
+						<input type="text" class="form-control" id="meal-name" name="mealName" placeholder="Název jídla" required />
+					</div>
+					<div class="form-group">
+						<label for="calories">Calorie</label>
+						<input type="number" class="form-control" id="calories" name="calories" placeholder="Počet kalorií" required />
+					</div>
+					<div class="form-group">
+						<label for="meal-type"></label>
+						<select class="form-control" id="meal-type" name="mealType">
+							<option value="Normal">Normalní jídlo</option>
+							<option value="Vegan">Veganské jídlo</option>
+						</select>
+					</div>
+					<div class="form-group">
+						<label>Allergeny (pro multi-volbu podržte ctrl nebo shift)</label>
+						<select class="form-control" name="allergens" multiple="multiple" size="4">
+							<option value="allergen1">
+								Allergen 1
+							</option>
+							<option value="allergen2">
+								Allergen 2
+							</option>
+							<option value="allergen3">
+								Allergen 3
+							</option>
+							<option value="allergen4">
+								Allergen 4
+							</option>
+							<option value="allergen5">
+								Allergen 5
+							</option>
+						</select>
+						<input style="margin-top: 3%;" type="submit" class="btn btn-info" value="Přidej jídlo" />
+					</div>
+				</fieldset>
+			</form>
+		</div>
+	</div>
+</body>
+</html>
