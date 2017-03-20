@@ -8,61 +8,13 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MealsToday.MVC.Providers.Base;
 using MealsToday.MVC.Providers.Data;
 
 namespace MealsToday.MVC.Providers
 {
-	public class DatabaseProvider
+	public class AllergensProvider : GenericDatabaseProvider<Allergen>
 	{
-
-		protected void Exec(string sql, Action<SqlCommand> what)
-		{
-			var connectionString = ConfigurationManager.ConnectionStrings["MealsDB"].ConnectionString;
-
-			using (SqlConnection conn = new SqlConnection(connectionString))
-			{
-				SqlCommand cmd = conn.CreateCommand();
-
-				cmd.CommandText = sql;
-				cmd.CommandType = CommandType.Text;
-
-				conn.Open();
-
-				what(cmd);
-
-				conn.Close();
-			}
-		}
-
-		protected void ExecNonQuery(string sql)
-		{
-			Exec(sql, cmd => cmd.ExecuteNonQuery());
-		}
-
-		protected List<T> ExecuteQuery<T>(string sql, Func<SqlDataReader, T> mapFunc, CommandBehavior? behavior = null)
-		{
-			List<T> list = new List<T>(50);
-
-			Exec(sql, cmd =>
-			{
-				using (var reader = cmd.ExecuteReader(!behavior.HasValue ? CommandBehavior.Default : behavior.Value))
-				{
-					if (reader.HasRows)
-						while (reader.Read())
-						{
-							list.Add(mapFunc(reader));
-						}
-				}
-			});
-
-			return list;
-		}
-
-		protected T ExecuteSingleQuery<T>(string sql, Func<SqlDataReader, T> mapFunc)
-		{
-			return ExecuteQuery(sql, mapFunc, CommandBehavior.SingleRow).FirstOrDefault();
-		}
-
 		public void CreateAllergen(string name, byte number)
 		{
 
@@ -76,16 +28,7 @@ namespace MealsToday.MVC.Providers
 
 			var sql = $"select * from Allergen";
 
-			return ExecuteQuery(sql, reader =>
-			{
-				Allergen al = new Allergen();
-
-				al.Name = reader["Name"] as string;
-				al.Number = Convert.ToByte(reader["Number"]);
-				al.AllergenId = Convert.ToInt16(reader["AllergenId"]);
-
-				return al;
-			});
+			return ExecuteQuery(sql, SelectMapFunction);
 		}
 
 		public Allergen GetAllergen(short allergenId)
@@ -155,6 +98,17 @@ namespace MealsToday.MVC.Providers
 			string sql = $"DELETE FROM dbo.Allergen WHERE AllergenId{allergenId}";
 
 			ExecNonQuery(sql);
+		}
+
+		protected override Allergen SelectMapFunction(SqlDataReader reader)
+		{
+			Allergen al = new Allergen();
+
+			al.Name = reader["Name"] as string;
+			al.Number = Convert.ToByte(reader["Number"]);
+			al.AllergenId = Convert.ToInt16(reader["AllergenId"]);
+
+			return al;
 		}
 	}
 }
