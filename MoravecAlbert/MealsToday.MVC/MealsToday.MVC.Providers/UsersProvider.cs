@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Configuration;
+using System.Data;
 using System.Data.SqlClient;
 using MealsToday.MVC.Providers.Assets;
 using MealsToday.MVC.Providers.Base;
 using MealsToday.MVC.Providers.Data;
+using MealsToday.MVC.Providers.DbModels;
 
 namespace MealsToday.MVC.Providers
 {
@@ -23,17 +27,38 @@ namespace MealsToday.MVC.Providers
 			return ExecuteQuery(sql, SelectMapFunction);
 		}
 
-		public User Insert(User user)
+		public int Insert(User user)
 		{
 			var sql = string.Format(SQL.User_Insert, user.UserTypeCode, user.FirstName, user.LastName, user.Email);
 
-			ExecNonQuery();
-			return Get()
+			var model = ExecuteSingleQuery(sql,
+				reader => new UserInserted() {Email = reader["Email"].ToString(), UserId = (int) reader["UserId"]});
+			return model.UserId;
 		}
 
 		public User Update(User user)
 		{
-			
+			var connectionString = ConfigurationManager.ConnectionStrings["MealsDB"].ConnectionString;
+
+			using (SqlConnection conn = new SqlConnection(connectionString))
+			{
+				SqlCommand cmd = conn.CreateCommand();
+
+				cmd.CommandText = "dbo.UpdateUser";
+				cmd.CommandType = CommandType.StoredProcedure;
+
+				cmd.Parameters.AddWithValue("firstName", user.FirstName);
+				cmd.Parameters.AddWithValue("lastName", user.LastName);
+				cmd.Parameters.AddWithValue("email", user.Email);
+				cmd.Parameters.AddWithValue("usertypecode", user.UserTypeCode);
+				cmd.Parameters.AddWithValue("userid", user.Id);
+
+				conn.Open();
+
+				cmd.ExecuteNonQuery();
+
+				conn.Close();
+			}
 		}
 
 		public void Delete(int id)

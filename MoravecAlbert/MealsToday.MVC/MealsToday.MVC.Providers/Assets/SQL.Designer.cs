@@ -70,7 +70,7 @@ namespace MealsToday.MVC.Providers.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to INSERT INTO dbo.User (UserTypeCode, FirstName, LastName, Email) VALUE (&apos;{0}&apos;, &apos;{1}&apos;, &apos;{2}&apos;, &apos;{3}&apos;).
+        ///   Looks up a localized string similar to INSERT INTO dbo.User (UserTypeCode, FirstName, LastName, Email) VALUE (&apos;{0}&apos;, &apos;{1}&apos;, &apos;{2}&apos;, &apos;{3}&apos;) OUTPUT inserted.UserId, inserted.Email.
         /// </summary>
         internal static string User_Insert {
             get {

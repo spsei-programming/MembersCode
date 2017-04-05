@@ -51,6 +51,7 @@
     <Compile Include="Base\GenericDatabaseProvider.cs" />
     <Compile Include="Data\Allergen.cs" />
     <Compile Include="Data\User.cs" />
+    <Compile Include="DbModels\UserInserted.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UsersProvider.cs" />
   </ItemGroup>

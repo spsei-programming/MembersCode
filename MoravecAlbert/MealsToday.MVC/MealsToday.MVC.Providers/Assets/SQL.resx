@@ -121,6 +121,6 @@
     <value>SELECT * FROM dbo.User {0}</value>
   </data>
   <data name="User_Insert" xml:space="preserve">
-    <value>INSERT INTO dbo.User (UserTypeCode, FirstName, LastName, Email) VALUE ('{0}', '{1}', '{2}', '{3}')</value>
+    <value>INSERT INTO dbo.User (UserTypeCode, FirstName, LastName, Email) VALUE ('{0}', '{1}', '{2}', '{3}') OUTPUT inserted.UserId, inserted.Email</value>
   </data>
 </root>
