@@ -1,0 +1,47 @@
+<!doctype html>
+<html>
+	<head>
+		<link rel="stylesheet" type="text/css" href="css/semantic.min.css">
+	</head>
+	<body>
+		<div class="ui container">
+			<table id="heroes-list" class="ui inverted right aligned table">
+				<thead>
+					<tr>
+						<th class="left aligned">Id</th>
+						<th class="left aligned">Hero name</th>
+					</tr>
+				</thead>
+				<tbody>
+					<!-- -->
+				</tbody>
+			</table>
+
+			<table class="ui inverted right aligned table">
+				<thead>
+					<tr>
+						<th class="left aligned">Id</th>
+						<th class="left aligned">Hero name</th>
+					</tr>
+				</thead>
+				<tbody>
+					<!-- -->
+				</tbody>
+			</table>
+		</div>
+	</body>
+
+	<script id="heroes-template" type="text/x-handlebars-template">
+		{{#each heroes}}
+		<tr>
+			<td class="left aligned">{{ id }}</td>
+			<td class="left aligned">{{ localized_name }}</td>
+		</tr>
+		{{/each}}
+	</script>
+
+	<script src="scripts/jquery-3.2.1.min.js"></script>
+	<script src="scripts/semantic.min.js"></script>
+	<script src="scripts/handlebars-v4.0.10.js"></script>
+	<script src="scripts/dota.js"></script>
+</html>
