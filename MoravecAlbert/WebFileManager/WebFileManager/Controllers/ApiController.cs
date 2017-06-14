@@ -4,18 +4,19 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Hosting;
+using System.Web.Http;
 using System.Web.Mvc;
 using WebFileManager.Models;
 
 namespace WebFileManager.Controllers
 {
-	public class ApiController : Controller
+	public class FilesController : ApiController
 	{
-		public ActionResult Get(string path = "")
+		public DirectoryContent Get(string path = "")
 		{
 			if (Path.IsPathRooted(path))
 			{
-				return Content("[]", "application/json");
+				return null;
 			}
 
 			var applicationPath = HostingEnvironment.ApplicationPhysicalPath;
@@ -30,19 +31,16 @@ namespace WebFileManager.Controllers
 			responseModel.Files.AddRange(files.Select(file => new RequestData(file.Name, file.FullName)).ToList());
 			responseModel.Directories.AddRange(directories.Select(directory => new RequestData(directory.Name, directory.FullName)).ToList());
 
-			var response = Newtonsoft.Json.JsonConvert.SerializeObject(responseModel);
-			//TODO folders
-
-			return Content(response, "application/json");
+			return responseModel;
 		}
 
-		public ActionResult Delete(string path)
+		public bool Delete(string path)
 		{
 			bool result = true;
 
 			if (path == null)
 			{
-				return Content(Newtonsoft.Json.JsonConvert.SerializeObject(new { result = false }), "application/json");
+				return false;
 			}
 
 			if (System.IO.File.Exists(path))
@@ -59,7 +57,7 @@ namespace WebFileManager.Controllers
 				result = false;
 			}
 
-			return Content(Newtonsoft.Json.JsonConvert.SerializeObject(new { result }), "application/json");
+			return result;
 		}
 	}
 }

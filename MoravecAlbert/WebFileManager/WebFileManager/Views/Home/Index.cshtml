@@ -22,8 +22,56 @@
 
 <div>
 	<div class="col-md-12">
-		<table class="table">
-			<thead></thead>
+		<table class="table" id="file-list">
+			<tr>
+				<td>Name</td><td>Full path</td><td>Action</td>
+			</tr>
+			<!-- -->
 		</table>
 	</div>
 </div>
+
+@section scripts {
+	<script id="list-template" type="text/x-handlebars-template">
+	{{#each Directories}}
+	<tr>
+		<td>{{ dirLink this}}</td>
+		<td>{{ Path }}</td>
+	</tr>
+	{{/each}}
+		
+		{{#each Files}}
+		<tr>
+			<td>{{ Name }}</td>
+			<td>{{ Path }}</td>
+		</tr>
+		{{/each}}
+</script>
+
+<script>
+		var source = $("#list-template").html();
+		var template = Handlebars.compile(source);
+
+	var Browse = function(path) {
+		$("#path").val(path);
+		$("#path").trigger("change");
+		e.preventDefault();
+	}
+
+		Handlebars.registerHelper('dirLink',
+			function(folder) {
+				return new Handlebars.SafeString("<a href='#' onclick='Browse(\"" + folder.Path + "\")'>" + folder.Name + "</a>");
+			});
+
+		$("#path")
+			.change(function() {
+				$.getJSON("/api/files/get",
+					{path: encodeURI($("#path").val())},
+					function(data) {
+						var html = template(data);
+
+						$("#file-list tbody").append(html);
+					});
+			});
+</script>
+}
